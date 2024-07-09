@@ -1,4 +1,9 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using TestAPI.Models;
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<MovieContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("MovieContext") ?? throw new InvalidOperationException("Connection string 'MovieContext' not found.")));
 
 // Add services to the container.
 
