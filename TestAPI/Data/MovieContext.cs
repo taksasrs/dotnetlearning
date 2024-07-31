@@ -8,11 +8,15 @@ namespace TestAPI.Models
 {
     public class MovieContext : DbContext
     {
+        public MovieContext()
+        {
+        }
+
         public MovieContext (DbContextOptions<MovieContext> options)
             : base(options)
         {
         }
 
-        public DbSet<TestAPI.Models.Movie> Movie { get; set; } = default!;
+        public DbSet<Movie> Movie { get; set; } = default!;
     }
 }
