@@ -7,7 +7,7 @@ using System.Transactions;
 using System.Data.Entity;
 
 
-namespace TestAPI.Repositories
+namespace TestAPI.Repository
 {
     public partial interface IMovieRepository
     {

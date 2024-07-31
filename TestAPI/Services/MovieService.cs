@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TestAPI.Models;
-using TestAPI.Repositories;
+using TestAPI.Repository;
 //using TestAPI.Repository;
 
 namespace TestAPI.Services
