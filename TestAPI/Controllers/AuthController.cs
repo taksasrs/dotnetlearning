@@ -55,7 +55,7 @@ namespace TestAPI.Controllers
     {
         public string Username { get; set; }
         public string Otp { get; set; }
-        public string JwtToken { get; set; }
-        public string RefreshToken { get; set; }
+        //public string JwtToken { get; set; }
+        //public string RefreshToken { get; set; }
     }
 }

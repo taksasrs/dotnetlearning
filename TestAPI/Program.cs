@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 });
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 //JWT Config
-var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!); // Replace with your secret key
+var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!); 
 
 builder.Services.AddAuthentication(x =>
 {
@@ -41,21 +41,20 @@ builder.Services.AddAuthorization(options =>
 });
 
 //init connection string
-builder.Services.AddDbContext<MovieContext>(options =>
+builder.Services.AddDbContext<EcommerceContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Add services to the container.
 // Register repositories and services
 builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<MovieService>();
 
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
 builder.Services.AddSingleton(new RedisCacheService(redisConnectionString));
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<WebService>();
 
 // Register controllers
 builder.Services.AddControllers();

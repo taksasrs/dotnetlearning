@@ -19,23 +19,23 @@ namespace TestAPI.Repository
 
     public partial class UserRepository : IUserRepository
     {
-        private readonly MovieContext _context;
+        private readonly EcommerceContext _context;
 
-        public UserRepository(MovieContext context)
+        public UserRepository(EcommerceContext context)
         {
             _context = context;
         }
 
         public async Task<User> GetUserByIdAsync(string username)
         {
-            var user = await _context.User.FindAsync(username);
+            var user = await _context.Users.FindAsync(username);
 
             return user;
         }
 
         public async Task<bool> AddUserAsync(User user)
         {
-            _context.User.Add(user);
+            _context.Users.Add(user);
             if (await _context.SaveChangesAsync() > 0)
                 return true;
             else
@@ -65,20 +65,20 @@ namespace TestAPI.Repository
 
         public async Task<bool> DeleteUserAsync(int id)
         {
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
                 return false;
             }
 
-            _context.User.Remove(user);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return true;
         }
 
         public bool UserExists(string username)
         {
-            return _context.User.Any(e => e.Username == username);
+            return _context.Users.Any(e => e.Username == username);
         }
     }
 
