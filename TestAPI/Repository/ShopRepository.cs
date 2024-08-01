@@ -13,12 +13,13 @@ namespace TestAPI.Repository
     {
         Task<Shop> GetShopByIdAsync(string shopId);
         Task<bool> AddShopAsync(Shop shop);
-        //Task<bool> DeleteUserAsync(int id);
+        Task<bool> UpdateShopAsync(int id, Shop shop);
+        Task<bool> DeleteShopAsync(int id);
         public bool ShopExists(int shopId);
     }
 
     public partial class WebRepository : IWebRepository
-    { 
+    {
         public async Task<Shop> GetShopByIdAsync(string shopId)
         {
             var shop = await _context.Shops.FindAsync(shopId);
@@ -28,46 +29,65 @@ namespace TestAPI.Repository
 
         public async Task<bool> AddShopAsync(Shop shop)
         {
-            _context.Shops.Add(shop);
-            if (await _context.SaveChangesAsync() > 0)
-                return true;
-            else
-                return false;
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                _context.Shops.Add(shop);
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    transaction.Commit();
+                    return true;
+                }
+                else
+                    transaction.Rollback();
+                    return false;
+            }
         }
 
-        // public async Task<bool> UpdateMovieAsync(int id, Movie movie)
-        // {
-        //     if (id != movie.Id)
-        //     {
-        //         return false;
-        //     }
+        public async Task<bool> UpdateShopAsync(int id, Shop shop)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                if (id != shop.ShopId)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
 
-        //     _context.Entry(movie).State = EntityState.Modified;
+                _context.Entry(shop).State = EntityState.Modified;
 
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         return false;
-        //     }
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
 
-        //     return true;
-        // }
+        public async Task<bool> DeleteShopAsync(int id)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                var shop = await _context.Shops.FindAsync(id);
 
-        //public async Task<bool> DeleteUserAsync(int id)
-        //{
-        //    var user = await _context.User.FindAsync(id);
-        //    if (user == null)
-        //    {
-        //        return false;
-        //    }
+                if (shop == null)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
 
-        //    _context.User.Remove(user);
-        //    await _context.SaveChangesAsync();
-        //    return true;
-        //}
+                _context.Shops.Remove(shop);
+                await _context.SaveChangesAsync();
+                transaction.Commit();
+                return true;
+            }
+
+        }
 
         public bool ShopExists(int shopId)
         {

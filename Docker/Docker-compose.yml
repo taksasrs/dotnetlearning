@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  sqlserver:
+    container_name: sqlserver
+    build:
+      context: .
+      dockerfile: ./Database/Dockerfile
+    restart: always
+    ports:
+      - "1433:1433" 
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=srs@2024
+    volumes: 
+      - ./Database/init-db.sql:/usr/src/app/init-db.sql

@@ -11,42 +11,78 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace TestAPI.Services
 {
-    //public interface IAuthService
-    //{
-    //    Task<bool> VerifyLoginAsync(string username, string password);
-    //}
-
-    public partial class WebService 
+    public partial class ShopService 
     {
-        private readonly IUserRepository _repository;
+        private readonly IWebRepository _repository;
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
 
-        public WebService(IUserRepository repository,IConfiguration configuration, HttpClient httpClient)
+        public ShopService(IWebRepository repository,IConfiguration configuration, HttpClient httpClient)
         {
             _repository = repository;
             _configuration = configuration;
             _httpClient = httpClient;
         }
-        public async Task<MCommon<object>> CreateUser(User user)
+        public async Task<MCommon<object>> CreateShop(Shop shop)
         {
-            var ret = new MCommon<object>();
+            var res = new MCommon<object>();
             try
             {
-                if (!_repository.UserExists(user.Username))
+                if (!_repository.ShopExists(shop.ShopId))
                 {
-                    ret.Success = await _repository.AddUserAsync(user);
+                    res.Success = await _repository.AddShopAsync(shop);
                 }
                 else
                 {
-                    ret.ErrorMessage = "User already exist";
+                    res.ErrorMessage = "Shop already exist";
                 }
             }
             catch
             {
                 throw;
             }
-            return ret;
+            return res;
         }
+
+        public async Task<MCommon<IActionResult>> EditShop(int id, Shop shop){
+            var res = new   MCommon<IActionResult>();
+            try
+            {
+                if (_repository.ShopExists(shop.ShopId))
+                {
+                    res.Success = await _repository.UpdateShopAsync(id, shop);
+                }
+                else
+                {
+                    res.ErrorMessage = "Shop not already exist";
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            return res;
+        }
+
+        public async Task<MCommon<IActionResult>> DeleteShop(int id){
+            var res = new   MCommon<IActionResult>();
+            try
+            {
+                if (_repository.ShopExists(id))
+                {
+                    res.Success = await _repository.DeleteShopAsync(id);
+                }
+                else
+                {
+                    res.ErrorMessage = "Shop not already exist";
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            return res;
+        }
+
     }
 }
