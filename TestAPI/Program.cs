@@ -14,26 +14,31 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     EnvironmentName = Environments.Development
     // EnvironmentName = Environments.Production
 });
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+//JWT Config
+var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!); // Replace with your secret key
 
-//JWT Authen config
-// builder.Services.AddAuthentication(cfg => {
-//     cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//     cfg.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//     cfg.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-// }).AddJwtBearer(x => {
-//     x.RequireHttpsMetadata = false;
-//     x.SaveToken = false;
-//     x.TokenValidationParameters = new TokenValidationParameters {
-//         ValidateIssuerSigningKey = true,
-//         IssuerSigningKey = new SymmetricSecurityKey(
-//             Encoding.UTF8
-//             .GetBytes(configuration["ApplicationSettings:JWT_Secret"])
-//         ),
-//         ValidateIssuer = false,
-//         ValidateAudience = false,
-//         ClockSkew = TimeSpan.Zero
-//     };
-// });
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+});
 
 //init connection string
 builder.Services.AddDbContext<MovieContext>(options =>
@@ -49,6 +54,8 @@ builder.Services.AddScoped<MovieService>();
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
 builder.Services.AddSingleton(new RedisCacheService(redisConnectionString));
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<UserService>();
 
 // Register controllers
 builder.Services.AddControllers();
@@ -70,6 +77,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllers();
+//});
 app.MapControllers();
 
 app.Run();

@@ -60,7 +60,6 @@ namespace TestAPI.Services
                     if (response.IsSuccessStatusCode)
                     {
                         ret.Success = true;
-                        //ret.Data.Add(otp);
                     }
                 }
                 else
@@ -93,13 +92,13 @@ namespace TestAPI.Services
             return new string(otp);
         }
 
-        //public async Task<bool> VerifyOtpAsync(string username,string otp)
-        //{
-        //    var realOtp = await _redisCacheService.GetStringAsync(username);
-        //    if (realOtp == otp)
-        //        return true;
-        //    else
-        //        return false;
-        //}
+        public async Task<bool> VerifyOtpAsync(string username, string otp)
+        {
+            var realOtp = await _redisCacheService.GetStringAsync(username);
+            if (realOtp == otp)
+                return true;
+            else
+                return false;
+        }
     }
 }

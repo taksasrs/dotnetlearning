@@ -12,7 +12,7 @@ namespace TestAPI.Repository
     public partial interface IUserRepository
     {
         Task<User> GetUserByIdAsync(string username);
-        Task<User> AddUserAsync(User user);
+        Task<bool> AddUserAsync(User user);
         Task<bool> DeleteUserAsync(int id);
         public bool UserExists(string username);
     }
@@ -33,11 +33,13 @@ namespace TestAPI.Repository
             return user;
         }
 
-        public async Task<User> AddUserAsync(User user)
+        public async Task<bool> AddUserAsync(User user)
         {
             _context.User.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
+            if (await _context.SaveChangesAsync() > 0)
+                return true;
+            else
+                return false;
         }
 
         // public async Task<bool> UpdateMovieAsync(int id, Movie movie)
