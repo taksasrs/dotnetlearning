@@ -1,21 +1,19 @@
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
-namespace TestAPI.Models
+namespace TestAPI.Models ;
+
+public partial class User
 {
-	public class User
-	{
-		// public int Id { get; set; }
-        [Required]
-        [Key]
-        public string Username { get; set; }
-        [Required]
-        [StringLength(60, MinimumLength = 6)]
-        public string Password { get; set; }
-        [Required]
-        public string ChatId { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime CreateDate { get; set; } = DateTime.Now;
-    }
-}
+    public int UserId { get; set; }
 
+    public string Username { get; set; } = null!;
+
+    public string Password { get; set; } = null!;
+
+    public string ChatId { get; set; } = null!;
+
+    public DateTime? CreateAt { get; set; }
+
+    public virtual ICollection<Shop> Shops { get; set; } = new List<Shop>();
+}

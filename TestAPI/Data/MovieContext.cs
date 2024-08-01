@@ -18,9 +18,6 @@ namespace TestAPI.Models
         }
 
         public DbSet<Movie> Movie { get; set; } = default!;
-        public DbSet<User> User {get;set;}
-        public DbSet<Shop> Shop {get;set;}
-        public DbSet<Product> Product {get;set;}
 
         // protected override void OModelCreating(ModelBuilder modelBuilder)
         // {
