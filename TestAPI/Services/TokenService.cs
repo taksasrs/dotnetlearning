@@ -4,18 +4,25 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Azure;
 using Microsoft.IdentityModel.Tokens;
 using TestAPI.Repository;
 
 namespace TestAPI.Services
 {
-    public class TokenService
+    public interface ITokenService
+    {
+    
+    }
+    public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
+        private readonly string _secretKey;
 
         public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
+            _secretKey = configuration["JwtSettings:SecretKey"]!;
         }
 
         private const double JwtExpireHours = 1; // JWT expiration time
@@ -23,9 +30,8 @@ namespace TestAPI.Services
 
         public string GenerateJwtToken(string username)
         {
-            var secret = _configuration["JwtSettings:SecretKey"];
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secret!);
+            var key = Encoding.ASCII.GetBytes(_secretKey);
             try
             {
                 var tokenDescriptor = new SecurityTokenDescriptor
@@ -52,8 +58,6 @@ namespace TestAPI.Services
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomBytes);
-                //save refreshtoken in database for 7days
-
                 return Convert.ToBase64String(randomBytes);
             }
         }
@@ -77,5 +81,17 @@ namespace TestAPI.Services
 
             return usernameClaim?.Value;
         }
+
+        //public void SetRefreshTokenCookie(string refreshToken)
+        //{
+        //    var cookieOptions = new CookieOptions
+        //    {
+        //        HttpOnly = true,
+        //        Secure = true, // Ensure the cookie is only sent over HTTPS
+        //        Expires = DateTime.UtcNow.AddDays(30) // Set appropriate expiry time
+        //    };
+
+        //    Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+        //}
     }
 }

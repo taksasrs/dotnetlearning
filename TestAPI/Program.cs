@@ -31,6 +31,7 @@ builder.Services.AddAuthentication(x =>
     x.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
         ValidateAudience = false
@@ -40,6 +41,8 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
 });
+
+
 
 //init connection string
 builder.Services.AddDbContext<EcommerceContext>(options =>
@@ -69,6 +72,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
+app.UseMiddleware<TokenValidationMiddleware>();
+
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();

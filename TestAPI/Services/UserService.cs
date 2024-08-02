@@ -49,9 +49,11 @@ namespace TestAPI.Services
             return ret;
         }
 
-        public async Task<User> GetUser(int id)
+        public async Task<ServiceResponse<User>> GetUser(int id)
         {
-            var ret = await _repository.GetUserByIdAsync(id);
+            var ret = new ServiceResponse<User>();
+            ret.Data =  await _repository.GetUserByIdAsync(id);
+            ret.Success = true;
             return ret;
         }
     }

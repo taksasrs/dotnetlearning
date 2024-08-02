@@ -2,10 +2,10 @@
 {
 	public class ServiceResponse<T>
 	{
-		public List<T> Data { get; set; }
+		public T Data { get; set; }
 		public bool Success { get; set; } = false;
 		public string ErrorMessage { get; set; }
-		public DateTime RequestDate { get; set; } = DateTime.Now;
+		public string RequestDate { get; set; } = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
 	}
 }
 
