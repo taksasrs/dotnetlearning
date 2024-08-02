@@ -12,5 +12,5 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=srs@2024
-    volumes: 
-      - ./Database/init-db.sql:/usr/src/app/init-db.sql
+    # volumes: 
+    #   - ./Database/init-db.sql:/usr/src/app/init-db.sql
