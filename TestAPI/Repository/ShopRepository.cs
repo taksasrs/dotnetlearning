@@ -5,21 +5,30 @@ using Microsoft.EntityFrameworkCore;
 using TestAPI.Models;
 using System.Transactions;
 using System.Data.Entity;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace TestAPI.Repository
 {
     public partial interface IWebRepository
     {
+        Task<IEnumerable<Shop>> GetAllShop();
         Task<Shop> GetShopByIdAsync(string shopId);
         Task<bool> AddShopAsync(Shop shop);
         Task<bool> UpdateShopAsync(int id, Shop shop);
         Task<bool> DeleteShopAsync(int id);
         public bool ShopExists(int shopId);
+
+        public bool ShopExistsByName(string name);
     }
 
     public partial class WebRepository : IWebRepository
     {
+        public async Task<IEnumerable<Shop>> GetAllShop(){
+            var data = await _context.Shops.ToListAsync();
+            return data;
+        }
         public async Task<Shop> GetShopByIdAsync(string shopId)
         {
             var shop = await _context.Shops.FindAsync(shopId);
@@ -86,12 +95,20 @@ namespace TestAPI.Repository
                 transaction.Commit();
                 return true;
             }
-
         }
 
         public bool ShopExists(int shopId)
         {
             return _context.Shops.Any(e => e.ShopId == shopId);
+        }
+
+        public bool ShopExistsByName(string name){
+            var data = _context.Shops.FirstOrDefault(s => s.Name.Equals(name));
+            if(data != null){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
 

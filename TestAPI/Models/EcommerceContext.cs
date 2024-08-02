@@ -24,7 +24,7 @@ public partial class EcommerceContext : DbContext
     public virtual DbSet<Token> Tokens { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=localhost;Database=ECommerce;User Id=sa;password=srs@2024;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,10 +63,10 @@ public partial class EcommerceContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Username).HasColumnName("Username");
 
-            //entity.HasOne(d => d.User).WithMany(p => p.Shops)
-            //    .HasForeignKey(d => d.User)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("Username");
+            // entity.HasOne(d => d.User).WithMany(p => p.Shops)
+            //     .HasForeignKey(d => d.UserId)
+            //     .OnDelete(DeleteBehavior.ClientSetNull)
+            //     .HasConstraintName("UserID");
         });
 
         modelBuilder.Entity<User>(entity =>

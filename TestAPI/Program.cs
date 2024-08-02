@@ -8,6 +8,7 @@ using System.Text;
 using TestAPI.Repository;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using System.Configuration;
+using TestAPI.Helpers;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -16,7 +17,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 });
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 //JWT Config
-var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!); 
+var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);
 
 builder.Services.AddAuthentication(x =>
 {
@@ -52,18 +53,22 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWebRepository, WebRepository>();
+
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
 builder.Services.AddSingleton(new RedisCacheService(redisConnectionString));
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ShopService>();
+builder.Services.AddScoped<ProductService>();
+// builder.Services.AddScoped<ShopService>();
 
 // Register controllers
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

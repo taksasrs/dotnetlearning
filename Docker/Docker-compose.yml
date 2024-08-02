@@ -12,5 +12,10 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=srs@2024
-    volumes: 
-      - ./Database/init-db.sql:/usr/src/app/init-db.sql
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379" 
