@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using TestAPI.Repository;
 
 namespace TestAPI.Services
 {
@@ -52,6 +53,7 @@ namespace TestAPI.Services
             {
                 rng.GetBytes(randomBytes);
                 //save refreshtoken in database for 7days
+
                 return Convert.ToBase64String(randomBytes);
             }
         }
@@ -60,6 +62,7 @@ namespace TestAPI.Services
         {
             // Implement your logic to validate the refresh token
             // e.g., check if it exists in the database and hasn't expired
+
             return true;
         }
 

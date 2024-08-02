@@ -48,13 +48,13 @@ builder.Services.AddDbContext<EcommerceContext>(options =>
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+builder.Services.AddScoped<IWebRepository, WebRepository>();
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
 builder.Services.AddSingleton(new RedisCacheService(redisConnectionString));
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<WebService>();
+builder.Services.AddScoped<ShopService>();
 
 // Register controllers
 builder.Services.AddControllers();

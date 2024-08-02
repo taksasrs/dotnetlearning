@@ -59,19 +59,19 @@ public partial class EcommerceContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.Username).HasColumnName("Username");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Shops)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("UserID");
+            //entity.HasOne(d => d.User).WithMany(p => p.Shops)
+            //    .HasForeignKey(d => d.User)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("Username");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("User");
 
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.Username).HasColumnName("Username");
             entity.Property(e => e.ChatId)
                 .HasMaxLength(50)
                 .IsUnicode(false)

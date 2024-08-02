@@ -1,6 +1,6 @@
 ﻿namespace TestAPI.Models
 {
-	public class MCommon<T>
+	public class ServiceResponse<T>
 	{
 		public List<T> Data { get; set; }
 		public bool Success { get; set; } = false;

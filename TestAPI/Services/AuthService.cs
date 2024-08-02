@@ -30,14 +30,13 @@ namespace TestAPI.Services
             _httpClient = httpClient;
         }
 
-        public async Task<MCommon<string>> VerifyLoginAsync(string username,string password)
+        public async Task<ServiceResponse<string>> VerifyLoginAsync(string username,string password)
         {
             //verify username/pw
-            var ret = new MCommon<string>();
+            var ret = new ServiceResponse<string>();
             try
             {
-                var user = await _repository.GetUserByIdAsync(username);
-
+                var user = await _repository.GetUserByUsername(username);
                 if (user == null)
                 {
                     ret.ErrorMessage = "Invalid credentials";
@@ -47,8 +46,7 @@ namespace TestAPI.Services
                 {
                     //valid login
                     string apilToken = _configuration["TelegramApiToken"];
-                    //7473964948
-                    string chatID = user.ChatId;
+                    string chatID = user.ChatId;  //7473964948
                     //generate otp and save to redis
                     var otp = await GenerateAndSaveOtpAsync(user.Username);
                     string otpstring = $"Your OTP: {otp} will expire in 1 min 30 sec";

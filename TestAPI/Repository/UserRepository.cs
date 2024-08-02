@@ -11,7 +11,8 @@ namespace TestAPI.Repository
 {
     public partial interface IUserRepository
     {
-        Task<User> GetUserByIdAsync(string username);
+        Task<User> GetUserByIdAsync(int id);
+        Task<User> GetUserByUsername(string username);
         Task<bool> AddUserAsync(User user);
         Task<bool> DeleteUserAsync(int id);
         public bool UserExists(string username);
@@ -26,11 +27,19 @@ namespace TestAPI.Repository
             _context = context;
         }
 
-        public async Task<User> GetUserByIdAsync(string username)
+        public async Task<User> GetUserByIdAsync(int id)
         {
-            var user = await _context.Users.FindAsync(username);
+            var user = await _context.Users.FindAsync(id);
 
             return user;
+        }
+
+        public async Task<User> GetUserByUsername(string username)
+        {
+            var user = await _context.Users.Where(x => x.Username == username).ToListAsync();
+            //var user = _context.Users.FromSql($"select * from [User] where username = '{username}'").ToList();
+
+            return user.FirstOrDefault();
         }
 
         public async Task<bool> AddUserAsync(User user)

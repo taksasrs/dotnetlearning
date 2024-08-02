@@ -21,8 +21,15 @@ namespace TestAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostMovie(User user)
         {
-            var createdMovie = await _userService.CreateUser(user);
-            return Ok(createdMovie);
+            var createdUser = await _userService.CreateUser(user);
+            return Ok(createdUser);
+        }
+        // POST: api/User
+        [HttpGet]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var createdUser = await _userService.GetUser(id);
+            return Ok(createdUser);
         }
     }
 }

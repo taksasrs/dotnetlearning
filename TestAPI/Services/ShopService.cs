@@ -23,9 +23,9 @@ namespace TestAPI.Services
             _configuration = configuration;
             _httpClient = httpClient;
         }
-        public async Task<MCommon<object>> CreateShop(Shop shop)
+        public async Task<ServiceResponse<object>> CreateShop(Shop shop)
         {
-            var res = new MCommon<object>();
+            var res = new ServiceResponse<object>();
             try
             {
                 if (!_repository.ShopExists(shop.ShopId))
@@ -44,8 +44,8 @@ namespace TestAPI.Services
             return res;
         }
 
-        public async Task<MCommon<IActionResult>> EditShop(int id, Shop shop){
-            var res = new   MCommon<IActionResult>();
+        public async Task<ServiceResponse<IActionResult>> EditShop(int id, Shop shop){
+            var res = new ServiceResponse<IActionResult>();
             try
             {
                 if (_repository.ShopExists(shop.ShopId))
@@ -64,8 +64,8 @@ namespace TestAPI.Services
             return res;
         }
 
-        public async Task<MCommon<IActionResult>> DeleteShop(int id){
-            var res = new   MCommon<IActionResult>();
+        public async Task<ServiceResponse<IActionResult>> DeleteShop(int id){
+            var res = new  ServiceResponse<IActionResult>();
             try
             {
                 if (_repository.ShopExists(id))
