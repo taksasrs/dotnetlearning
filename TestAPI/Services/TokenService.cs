@@ -5,24 +5,23 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Azure;
+using TestAPI.Models;
 using Microsoft.IdentityModel.Tokens;
 using TestAPI.Repository;
 
 namespace TestAPI.Services
 {
-    public interface ITokenService
-    {
-    
-    }
-    public class TokenService : ITokenService
+    public class TokenService
     {
         private readonly IConfiguration _configuration;
         private readonly string _secretKey;
+        private readonly ITokenRepository _tokenRepository;
 
-        public TokenService(IConfiguration configuration)
+        public TokenService(IConfiguration configuration, ITokenRepository tokenRepository)
         {
             _configuration = configuration;
             _secretKey = configuration["JwtSettings:SecretKey"]!;
+            _tokenRepository = tokenRepository;
         }
 
         private const double JwtExpireHours = 1; // JWT expiration time
@@ -52,12 +51,22 @@ namespace TestAPI.Services
             }
         }
 
-        public string GenerateRefreshToken(string username)
+        public async Task<string> GenerateRefreshToken(string username,string oldToken = "")
         {
             var randomBytes = new byte[64];
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomBytes);
+                // save token
+                Token tokenModel = new Token()
+                {
+                    Username = username,
+                    RefreshToken = randomBytes.ToString()!,
+                    RefreshTokenExpiryTime = DateTime.Now.AddDays(RefreshTokenExpireDays)
+                };
+                if (string.IsNullOrEmpty(oldToken))
+                    await _tokenRepository.DeleteRefreshTokenAsync(oldToken);
+                await _tokenRepository.AddRefreshTokenAsync(tokenModel);
                 return Convert.ToBase64String(randomBytes);
             }
         }
@@ -65,22 +74,20 @@ namespace TestAPI.Services
         public bool ValidateRefreshToken(string refreshToken)
         {
             // Implement your logic to validate the refresh token
-            // e.g., check if it exists in the database and hasn't expired
-
-            return true;
+            return _tokenRepository.TokenValidate(refreshToken);
         }
 
-        public static string GetUsernameFromExpiredToken(string token)
-        {
-            // Decode the expired JWT to get the username
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadJwtToken(token);
+        //public static string GetUsernameFromExpiredToken(string token)
+        //{
+        //    // Decode the expired JWT to get the username
+        //    var tokenHandler = new JwtSecurityTokenHandler();
+        //    var jwtToken = tokenHandler.ReadJwtToken(token);
 
-            // Extract the username claim
-            var usernameClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "username");
+        //    // Extract the username claim
+        //    var usernameClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "username");
 
-            return usernameClaim?.Value;
-        }
+        //    return usernameClaim?.Value;
+        //}
 
         //public void SetRefreshTokenCookie(string refreshToken)
         //{

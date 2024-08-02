@@ -53,6 +53,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWebRepository, WebRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
 builder.Services.AddSingleton(new RedisCacheService(redisConnectionString));
@@ -72,7 +73,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-app.UseMiddleware<TokenValidationMiddleware>();
+//app.UseMiddleware<TokenValidationMiddleware>();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {

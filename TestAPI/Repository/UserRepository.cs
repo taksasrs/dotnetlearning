@@ -36,8 +36,11 @@ namespace TestAPI.Repository
 
         public async Task<User> GetUserByUsername(string username)
         {
+            //var users = from b in _context.Users
+            //            where b.Username.Equals(username)
+            //            select b;
             var user = await _context.Users.Where(x => x.Username == username).ToListAsync();
-            //var user = _context.Users.FromSql($"select * from [User] where username = '{username}'").ToList();
+            ///var user = _context.Users.FromSql($"select * from [User] where username = '{username}'").ToList();
 
             return user.FirstOrDefault();
         }
