@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using TestAPI.Models;
 using TestAPI.Services;
@@ -28,8 +29,10 @@ namespace TestAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUser(int id)
         {
-            var createdUser = await _userService.GetUser(id);
-            return Ok(createdUser);
+            var ret = await _userService.GetUser(id);
+            if (ret.Data == null)
+                return NotFound(ret);
+            return Ok(ret);
         }
     }
 }
