@@ -49,7 +49,7 @@ builder.Services.AddDbContext<EcommerceContext>(options =>
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IWebRepository, WebRepository>();builder.Services.AddScoped<IWebRepository, WebRepository>();
+builder.Services.AddScoped<IWebRepository, WebRepository>();
 
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
 builder.Services.AddSingleton(new RedisCacheService(redisConnectionString));
