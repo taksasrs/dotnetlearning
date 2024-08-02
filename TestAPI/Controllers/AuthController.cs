@@ -22,7 +22,7 @@ namespace TestAPI.Controllers
         [HttpPost("/GenerateToken")]
         public async Task<IActionResult> GenerateToken([FromBody] TokenRequest tokenRequest)
         {
-            var ret = new MCommon<object>();
+            var ret = new ServiceResponse<object>();
             // Validate OTP
             if (!await _authService.VerifyOtpAsync(tokenRequest.Username, tokenRequest.Otp))
             {

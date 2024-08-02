@@ -28,9 +28,9 @@ namespace TestAPI.Services
             _configuration = configuration;
             _httpClient = httpClient;
         }
-        public async Task<MCommon<object>> CreateUser(User user)
+        public async Task<ServiceResponse<object>> CreateUser(User user)
         {
-            var ret = new MCommon<object>();
+            var ret = new ServiceResponse<object>();
             try
             {
                 if (!_repository.UserExists(user.Username))
@@ -46,6 +46,12 @@ namespace TestAPI.Services
             {
                 throw;
             }
+            return ret;
+        }
+
+        public async Task<User> GetUser(int id)
+        {
+            var ret = await _repository.GetUserByIdAsync(id);
             return ret;
         }
     }
