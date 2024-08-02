@@ -32,7 +32,7 @@ namespace TestAPI.Services
             var data = await _repository.GetAllShop();
             return data;
         }
-        public async Task<ServiceResponse<object>> CreateShop(Shop shop)
+        public async Task<ServiceResponse<object>> CreateShop(CreateShopDto shop)
         {
             var res = new ServiceResponse<object>();
             try
@@ -50,7 +50,7 @@ namespace TestAPI.Services
             return res;
         }
 
-        public async Task<ServiceResponse<IActionResult>> EditShop(int id, Shop shop){
+        public async Task<ServiceResponse<IActionResult>> EditShop(int id, UpdateShopDto shop){
             var res = new ServiceResponse<IActionResult>();
             try
             {

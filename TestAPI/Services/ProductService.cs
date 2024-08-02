@@ -27,9 +27,9 @@ namespace TestAPI.Services
             return data;
         }
 
-        public async Task<MCommon<object>> CreateProduct(CreateProductDto product)
+        public async Task<ServiceResponse<object>> CreateProduct(CreateProductDto product)
         {
-            var res = new MCommon<object>();
+            var res = new ServiceResponse<object>();
             try
             {
                 if (!_repository.ProductExistsByName(product.Name))
@@ -48,8 +48,8 @@ namespace TestAPI.Services
             return res;
         }
 
-         public async Task<MCommon<IActionResult>> EditProduct(int id, UpdateProductDto product){
-            var res = new   MCommon<IActionResult>();
+         public async Task<ServiceResponse<IActionResult>> EditProduct(int id, UpdateProductDto product){
+            var res = new   ServiceResponse<IActionResult>();
             try
             {
                 if (_repository.ProductExists(product.ProductId))
@@ -68,8 +68,8 @@ namespace TestAPI.Services
             return res;
         }
 
-        public async Task<MCommon<IActionResult>> DeleteProduct(int id){
-            var res = new   MCommon<IActionResult>();
+        public async Task<ServiceResponse<IActionResult>> DeleteProduct(int id){
+            var res = new   ServiceResponse<IActionResult>();
             try
             {
                 if (_repository.ProductExists(id))

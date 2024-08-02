@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 });
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 //JWT Config
-var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!); 
+var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);
 
 builder.Services.AddAuthentication(x =>
 {
@@ -57,6 +57,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ShopService>();
+builder.Services.AddScoped<ProductService>();
 // builder.Services.AddScoped<ShopService>();
 
 // Register controllers
