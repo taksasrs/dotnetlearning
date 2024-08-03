@@ -35,9 +35,9 @@ namespace TestAPI.Controllers
 
             return Ok(new { JwtToken = newJwtToken, RefreshToken = newRefreshToken });
         }
-        [HttpPost("/RefreshToken")]
-        public IActionResult Refresh(TokenResponse tokenResponse)
-        {
+        // [HttpPost("/RefreshToken")]
+        // public IActionResult Refresh(TokenResponse tokenResponse)
+        // {
             // For simplicity, assume the refresh token is valid and stored securely
             // var storedRefreshToken = _userService.GetRefreshToken(userId);
 
@@ -46,16 +46,16 @@ namespace TestAPI.Controllers
             //    return Unauthorized();
 
             // For demonstration, let's just generate a new access token
-            var newAccessToken = _tokenService.GenerateAccessTokenFromRefreshToken(tokenResponse.RefreshToken, _config["Jwt:Secret"]);
+            // var newAccessToken = _tokenService.GenerateAccessTokenFromRefreshToken(tokenResponse.RefreshToken, _config["Jwt:Secret"]);
 
-            var response = new TokenResponse
-            {
-                AccessToken = newAccessToken,
-                RefreshToken = tokenResponse.RefreshToken // Return the same refresh token
-            };
+            // var response = new TokenResponse
+            // {
+            //     AccessToken = newAccessToken,
+            //     RefreshToken = tokenResponse.RefreshToken // Return the same refresh token
+            // };
 
-            return Ok(response);
-        }
+        //     return Ok(response);
+        // }
         [HttpPost]
         [Route("/GenerateOtp")] //Login step
         public async Task<IActionResult> GenerateOtp(string username,string password)

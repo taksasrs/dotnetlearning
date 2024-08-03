@@ -21,7 +21,7 @@ public partial class EcommerceContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<Token> Tokens { get; set; }
+    // public virtual DbSet<Token> Tokens { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -61,7 +61,9 @@ public partial class EcommerceContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Username).HasColumnName("Username");
+            // entity.Property(e => e.Username).HasColumnName("Username");
+            // entity.Property(e => e.UserId).HasColumnName("UserID");
+
 
             // entity.HasOne(d => d.User).WithMany(p => p.Shops)
             //     .HasForeignKey(d => d.UserId)
@@ -73,7 +75,7 @@ public partial class EcommerceContext : DbContext
         {
             entity.ToTable("User");
 
-            entity.Property(e => e.Username).HasColumnName("Username");
+            entity.Property(e => e.UserId).HasColumnName("UserId");
             entity.Property(e => e.ChatId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
