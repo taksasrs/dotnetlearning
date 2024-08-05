@@ -44,13 +44,15 @@ namespace TestAPI.Repository
 
         public async Task<bool> DeleteRefreshTokenAsync(string token)
         {
-            var tok = await _context.Tokens.FindAsync(token);
+            var tok = await _context.Tokens.Where(x => x.RefreshToken == token).ToListAsync();
+
+            //var tok = await _context.Tokens.FindAsync(token);
             if (tok == null)
             {
                 return false;
             }
 
-            _context.Tokens.Remove(tok);
+            _context.Tokens.Remove(tok.FirstOrDefault()!);
             await _context.SaveChangesAsync();
             return true;
         }

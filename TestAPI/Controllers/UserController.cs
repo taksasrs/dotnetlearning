@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using TestAPI.Models;
 using TestAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TestAPI.Controllers
 {
@@ -27,6 +28,7 @@ namespace TestAPI.Controllers
         }
         // POST: api/User
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetUser(string username)
         {
             var ret = await _userService.GetUser(username);
