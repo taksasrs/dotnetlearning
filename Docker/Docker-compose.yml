@@ -13,6 +13,19 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=srs@2024
 
+  apiserver:
+    container_name: apiserver
+    build:
+      context: .
+      dockerfile: ../TestAPI/Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_URLS=http://+:5000;
+    restart: always
+
   redis:
     container_name: redis
     image: redis:latest
