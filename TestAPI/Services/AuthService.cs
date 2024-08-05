@@ -36,7 +36,7 @@ namespace TestAPI.Services
             var ret = new ServiceResponse<string>();
             try
             {
-                var user = await _repository.GetUserByUsername(username);
+                var user = await _repository.GetUserByUsernameAsync(username);
                 if (user == null)
                 {
                     ret.ErrorMessage = "Invalid credentials";
@@ -75,7 +75,7 @@ namespace TestAPI.Services
         public async Task<string> GenerateAndSaveOtpAsync(string key, int otpLength = 6)
         {
             string otp = GenerateOtp(otpLength);
-            await _redisCacheService.SetStringAsync(key, otp, TimeSpan.FromSeconds(90));
+            await _redisCacheService.SetStringAsync(key, otp, TimeSpan.FromSeconds(300));
             return otp;
         }
 

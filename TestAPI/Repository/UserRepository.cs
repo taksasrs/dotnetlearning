@@ -11,10 +11,11 @@ namespace TestAPI.Repository
 {
     public partial interface IUserRepository
     {
-        Task<User> GetUserByIdAsync(int id);
-        Task<User> GetUserByUsername(string username);
+        Task<User> GetUserByUsernameAsync(string username);
+        //Task<User> GetUserByUsername(string username);
+        //Task<User> GetUserIdByUsername(int id);
         Task<bool> AddUserAsync(User user);
-        Task<bool> DeleteUserAsync(int id);
+        Task<bool> DeleteUserAsync(string username);
         public bool UserExists(string username);
     }
 
@@ -27,17 +28,24 @@ namespace TestAPI.Repository
             _context = context;
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<User> GetUserByUsernameAsync(string username)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(username);
 
             return user;
         }
-
+        //public async Task<User> GetUserIdByUsername(int id)
+        //{
+        //    var user = await _context.Users.Where(x => x.UserId == id).ToListAsync();
+        //    return user.FirstOrDefault();
+        //}
         public async Task<User> GetUserByUsername(string username)
         {
+            //var users = from b in _context.Users
+            //            where b.Username.Equals(username)
+            //            select b;
             var user = await _context.Users.Where(x => x.Username == username).ToListAsync();
-            //var user = _context.Users.FromSql($"select * from [User] where username = '{username}'").ToList();
+            ///var user = _context.Users.FromSql($"select * from [User] where username = '{username}'").ToList();
 
             return user.FirstOrDefault();
         }
@@ -72,9 +80,9 @@ namespace TestAPI.Repository
         //     return true;
         // }
 
-        public async Task<bool> DeleteUserAsync(int id)
+        public async Task<bool> DeleteUserAsync(string username)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(username);
             if (user == null)
             {
                 return false;

@@ -89,6 +89,25 @@ public partial class EcommerceContext : DbContext
                 .IsUnicode(false);
         });
 
+        //modelBuilder.Entity<Token>(entity =>
+        //{
+        //    entity.ToTable("Token");
+
+        //    entity.Property(e => e.RefreshToken)
+        //        .HasMaxLength(200)
+        //        .IsUnicode(false)
+        //        .HasColumnName("RefreshToken");
+        //    entity.Property(e => e.Username).HasColumnName("Username");
+        //    entity.Property(e => e.RefreshTokenExpiryTime)
+        //        .HasDefaultValueSql("(getdate())")
+        //        .HasColumnType("datetime");
+        //});
+
+        modelBuilder.Entity<Token>().ToTable("Token");
+        modelBuilder.Entity<Token>().Property(t => t.Username).IsRequired().HasMaxLength(50);
+        modelBuilder.Entity<Token>().Property(t => t.RefreshToken).IsRequired();
+        modelBuilder.Entity<Token>().Property(t => t.RefreshTokenExpiryTime).IsRequired();
+
         OnModelCreatingPartial(modelBuilder);
     }
 

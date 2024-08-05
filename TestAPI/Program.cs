@@ -9,12 +9,20 @@ using TestAPI.Repository;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using System.Configuration;
 using TestAPI.Helpers;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     EnvironmentName = Environments.Development
     // EnvironmentName = Environments.Production
 });
+
+// Configure Kestrel to listen on 0.0.0.0
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    serverOptions.Listen(System.Net.IPAddress.Any, 5000);
+//});
+
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 //JWT Config
 var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);
@@ -53,6 +61,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWebRepository, WebRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
 builder.Services.AddSingleton(new RedisCacheService(redisConnectionString));
@@ -67,7 +76,34 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddCors(options =>
@@ -84,7 +120,7 @@ builder.Services.AddCors(options =>
 });
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-// app.UseMiddleware<TokenValidationMiddleware>();
+//app.UseMiddleware<TokenValidationMiddleware>();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {

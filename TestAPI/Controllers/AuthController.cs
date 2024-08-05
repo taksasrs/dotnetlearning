@@ -22,37 +22,35 @@ namespace TestAPI.Controllers
         [HttpPost("/GenerateToken")]
         public async Task<IActionResult> GenerateToken([FromBody] TokenRequest tokenRequest)
         {
-            var ret = new ServiceResponse<object>();
             // Validate OTP
             if (!await _authService.VerifyOtpAsync(tokenRequest.Username, tokenRequest.Otp))
             {
-                return Unauthorized(ret);
+                return Unauthorized();
+            }
+            TokenResponse dat = new();
+            // Generate new tokens
+            dat.JwtToken = _tokenService.GenerateJwtToken(tokenRequest.Username);
+            dat.RefreshToken = await _tokenService.GenerateRefreshToken(tokenRequest.Username);
+
+            return Ok(dat);
+        }
+        [HttpPost("/RefreshToken")]
+        public async Task<IActionResult> Refresh(TokenRefreshRequest tokenResponse)
+        {
+            // Verify refresh token (validate against the stored token)
+            if (!_tokenService.ValidateRefreshToken(tokenResponse.RefreshToken))
+            {
+                return Unauthorized();
             }
 
-            // Generate new tokens
-            var newJwtToken = _tokenService.GenerateJwtToken(tokenRequest.Username);
-            var newRefreshToken = _tokenService.GenerateRefreshToken(tokenRequest.Username);
-
-            return Ok(new { JwtToken = newJwtToken, RefreshToken = newRefreshToken });
-        }
-        // [HttpPost("/RefreshToken")]
-        // public IActionResult Refresh(TokenResponse tokenResponse)
-        // {
-            // For simplicity, assume the refresh token is valid and stored securely
-            // var storedRefreshToken = _userService.GetRefreshToken(userId);
-
-            // Verify refresh token (validate against the stored token)
-            // if (storedRefreshToken != tokenResponse.RefreshToken)
-            //    return Unauthorized();
-
             // For demonstration, let's just generate a new access token
-            // var newAccessToken = _tokenService.GenerateAccessTokenFromRefreshToken(tokenResponse.RefreshToken, _config["Jwt:Secret"]);
-
-            // var response = new TokenResponse
-            // {
-            //     AccessToken = newAccessToken,
-            //     RefreshToken = tokenResponse.RefreshToken // Return the same refresh token
-            // };
+            var newJwtToken = _tokenService.GenerateJwtToken(tokenResponse.Username);
+            var newRefreshToken = await _tokenService.GenerateRefreshToken(tokenResponse.Username);
+            var response = new TokenResponse
+            {
+                JwtToken = newJwtToken,
+                RefreshToken = newRefreshToken
+            };
 
         //     return Ok(response);
         // }

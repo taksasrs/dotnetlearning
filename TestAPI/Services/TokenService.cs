@@ -5,24 +5,23 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Azure;
+using TestAPI.Models;
 using Microsoft.IdentityModel.Tokens;
 using TestAPI.Repository;
 
 namespace TestAPI.Services
 {
-    public interface ITokenService
-    {
-    
-    }
-    public class TokenService : ITokenService
+    public class TokenService
     {
         private readonly IConfiguration _configuration;
         private readonly string _secretKey;
+        private readonly ITokenRepository _tokenRepository;
 
-        public TokenService(IConfiguration configuration)
+        public TokenService(IConfiguration configuration, ITokenRepository tokenRepository)
         {
             _configuration = configuration;
             _secretKey = configuration["JwtSettings:SecretKey"]!;
+            _tokenRepository = tokenRepository;
         }
 
         private const double JwtExpireHours = 1; // JWT expiration time
@@ -52,14 +51,18 @@ namespace TestAPI.Services
             }
         }
 
-        public string GenerateRefreshToken(string username)
+        public async Task<string> GenerateRefreshToken(string username)
         {
-            var randomBytes = new byte[64];
-            using (var rng = RandomNumberGenerator.Create())
+            Token token = new Token()
             {
-                rng.GetBytes(randomBytes);
-                return Convert.ToBase64String(randomBytes);
-            }
+                Username = username,
+                RefreshToken = GenerateRandomToken(),//"mydummyr3fresht0k3nand1l332s",//randomBytes.ToString()!,
+                RefreshTokenExpiryTime = DateTime.Now.AddDays(RefreshTokenExpireDays)
+            };
+
+            await _tokenRepository.AddRefreshTokenAsync(token);
+            return token.RefreshToken;
+            
         }
 
         public bool ValidateRefreshToken(string refreshToken)
@@ -80,6 +83,20 @@ namespace TestAPI.Services
             var usernameClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "username");
 
             return usernameClaim?.Value;
+        }
+
+        public static string GenerateRandomToken()
+        {
+            byte[] randomBytes = new byte[64]; // 64 bits = 8 bytes
+            RandomNumberGenerator.Fill(randomBytes);
+
+            // Convert to Base64 string
+            string token = Convert.ToBase64String(randomBytes);
+
+            // Optional: remove any trailing padding characters ('=') for a cleaner token
+            token = token.TrimEnd('=');
+
+            return token;
         }
 
         //public void SetRefreshTokenCookie(string refreshToken)
