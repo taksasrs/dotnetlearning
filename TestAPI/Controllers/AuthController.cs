@@ -52,8 +52,8 @@ namespace TestAPI.Controllers
                 RefreshToken = newRefreshToken
             };
 
-        //     return Ok(response);
-        // }
+            return Ok(response);
+        }
         [HttpPost]
         [Route("/GenerateOtp")] //Login step
         public async Task<IActionResult> GenerateOtp(string username,string password)
