@@ -14,6 +14,7 @@ namespace TestAPI.Repository
         Task<bool> DeleteRefreshTokenAsync(string token);
         Task<bool> AddRefreshTokenAsync(Token token);
         bool TokenValidate(string token);
+        void RemoveTokenExists(string username);
     }
 
     public partial class TokenRepository : ITokenRepository
@@ -34,7 +35,11 @@ namespace TestAPI.Repository
 
         public async Task<bool> AddRefreshTokenAsync(Token token)
         {
-            
+            //var tok = await _context.Tokens.Where(x => x.Username == token.Username).ToListAsync();
+            //if (string.IsNullOrEmpty(tok))
+            //{
+
+            //}
             _context.Tokens.Add(token);
             if (await _context.SaveChangesAsync() > 0)
                 return true;
@@ -60,6 +65,14 @@ namespace TestAPI.Repository
         public bool TokenValidate(string token)
         {
             return _context.Tokens.Any(e => e.RefreshToken == token && e.RefreshTokenExpiryTime > DateTime.Now);
+        }
+
+        public async void RemoveTokenExists(string username)
+        {
+            var tok = await _context.Tokens.Where(x => x.Username == username).ToListAsync();
+            foreach (var tokenExists in tok)
+                _context.Tokens.Remove(tokenExists);
+            await _context.SaveChangesAsync();
         }
     }
 

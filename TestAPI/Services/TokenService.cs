@@ -53,12 +53,14 @@ namespace TestAPI.Services
 
         public async Task<string> GenerateRefreshToken(string username)
         {
-            Token token = new Token()
+            _tokenRepository.RemoveTokenExists(username);
+            Token token = new()
             {
                 Username = username,
-                RefreshToken = GenerateRandomToken(),//"mydummyr3fresht0k3nand1l332s",//randomBytes.ToString()!,
+                RefreshToken = GenerateRandomToken(),//"mydummyr3fr35ht0k3nand1l332s",//randomBytes.ToString()!,
                 RefreshTokenExpiryTime = DateTime.Now.AddDays(RefreshTokenExpireDays)
             };
+
 
             await _tokenRepository.AddRefreshTokenAsync(token);
             return token.RefreshToken;

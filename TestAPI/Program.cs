@@ -17,11 +17,16 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     // EnvironmentName = Environments.Production
 });
 
-// Configure Kestrel to listen on 0.0.0.0
+//Configure Kestrel to listen on 0.0.0.0
 //builder.WebHost.ConfigureKestrel(serverOptions =>
 //{
 //    serverOptions.Listen(System.Net.IPAddress.Any, 5000);
 //});
+builder.WebHost.ConfigureKestrel(options =>
+{
+    //options.ListenAnyIP(5000); // HTTP port
+    options.ListenAnyIP(5001, listenOptions => listenOptions.UseHttps()); // HTTPS port
+});
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 //JWT Config

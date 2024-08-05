@@ -47,6 +47,15 @@ CREATE TABLE [dbo].[Product] (
 );
 GO
 
+CREATE TABLE [dbo].[Token] (
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [Username] VARCHAR(50) NOT NULL,
+    [RefreshToken] NVARCHAR(MAX) NOT NULL,
+    [RefreshTokenExpiryTime] DATETIME NOT NULL,
+    CONSTRAINT [FK_Username] FOREIGN KEY ([Username]) REFERENCES [dbo].[User] ([Username])
+);
+GO
+
 -- Insert mock data into User table
 INSERT INTO [dbo].[User] ([Username], [Password], [ChatID])
 VALUES
