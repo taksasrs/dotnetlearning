@@ -14,7 +14,7 @@ namespace TestAPI.Repository
     public partial interface IWebRepository
     {
         Task<IEnumerable<Shop>> GetAllShop();
-        Task<Shop> GetShopByIdAsync(string shopId);
+        Task<Shop> GetShopByIdAsync(int shopId);
         Task<bool> AddShopAsync(Shop shop);
         Task<bool> UpdateShopAsync(int id, Shop shop);
         Task<bool> DeleteShopAsync(int id);
@@ -29,7 +29,7 @@ namespace TestAPI.Repository
             var data = await _context.Shops.ToListAsync();
             return data;
         }
-        public async Task<Shop> GetShopByIdAsync(string shopId)
+        public async Task<Shop> GetShopByIdAsync(int shopId)
         {
             var shop = await _context.Shops.FindAsync(shopId);
 

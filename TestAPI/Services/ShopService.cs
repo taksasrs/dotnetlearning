@@ -32,6 +32,11 @@ namespace TestAPI.Services
             var data = await _repository.GetAllShop();
             return data;
         }
+
+        public async Task<Shop> GetShopById(int id){
+            var data = await _repository.GetShopByIdAsync(id);
+            return data;
+        }
         public async Task<ServiceResponse<object>> CreateShop(CreateShopDto shop)
         {
             var res = new ServiceResponse<object>();

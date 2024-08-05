@@ -75,8 +75,11 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("*")
-             .WithMethods("PUT", "DELETE", "GET", "POST");
+            // policy.WithOrigins("*")
+            //  .WithMethods("PUT", "DELETE", "GET", "POST");
+             policy.WithOrigins("http://localhost:3000")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
         });
 });
 var app = builder.Build();
