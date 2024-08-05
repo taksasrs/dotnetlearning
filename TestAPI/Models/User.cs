@@ -6,7 +6,7 @@ namespace TestAPI.Models ;
 
 public partial class User
 {
-    public int UserId { get; set; }
+    [Key]
     public string Username { get; set; }
     [Required]
     public string Password { get; set; }

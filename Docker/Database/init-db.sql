@@ -11,12 +11,11 @@ GO
 
 -- Create User table
 CREATE TABLE [dbo].[User] (
-    [UserID]   INT           IDENTITY (1, 1) NOT NULL,
     [Username] VARCHAR (50)  NOT NULL,
     [Password] VARCHAR (MAX) NOT NULL,
     [ChatID]   VARCHAR (50)  NOT NULL,
     [CreateAt] DATETIME      CONSTRAINT [DEFAULT_User_CreateAt] DEFAULT (getdate()) NULL,
-    CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([UserID] ASC)
+    CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Username] ASC)
 );
 GO
 
@@ -27,9 +26,9 @@ CREATE TABLE [dbo].[Shop] (
     [Description] VARCHAR (MAX)   NULL,
     [Image]       VARBINARY (MAX) NULL,
     [CreateAt]    DATETIME        CONSTRAINT [DEFAULT_Shop_CreateAt] DEFAULT (getdate()) NULL,
-    [UserID]      INT             NOT NULL,
+    [Username]    VARCHAR (50)             NOT NULL,
     CONSTRAINT [PK_Shop] PRIMARY KEY CLUSTERED ([ShopID] ASC),
-    CONSTRAINT [UserID] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
+    CONSTRAINT [Username] FOREIGN KEY ([Username]) REFERENCES [dbo].[User] ([Username])
 );
 GO
 
@@ -64,16 +63,16 @@ VALUES
 GO
 
 -- Insert mock data into Shop table
-INSERT INTO [dbo].[Shop] ([Name], [Description], [Image], [UserID])
+INSERT INTO [dbo].[Shop] ([Name], [Description], [Image], [Username])
 VALUES
-('Tech Haven', 'A place for all your tech needs', NULL, 1),
-('Book Nook', 'Your cozy corner for books', NULL, 2),
-('Fashion Fiesta', 'Trendy fashion apparel for all', NULL, 3),
-('Gadget Galaxy', 'Latest gadgets and gizmos', NULL, 4),
-('Artisan Alley', 'Handmade goods and crafts', NULL, 5),
-('Sports Central', 'All the gear for sports enthusiasts', NULL, 6),
-('Music Mart', 'Instruments and music accessories', NULL, 7),
-('Toy Town', 'Toys and games for kids of all ages', NULL, 8),
-('Home Haven', 'Furniture and decor for your home', NULL, 9),
-('Pet Paradise', 'Everything for your furry friends', NULL, 10);
+('Tech Haven', 'A place for all your tech needs', NULL, 'alice_w'),
+('Book Nook', 'Your cozy corner for books', NULL, 'bob_m'),
+('Fashion Fiesta', 'Trendy fashion apparel for all', NULL, 'charlie_h'),
+('Gadget Galaxy', 'Latest gadgets and gizmos', NULL, 'diana_p'),
+('Artisan Alley', 'Handmade goods and crafts', NULL, 'edward_k'),
+('Sports Central', 'All the gear for sports enthusiasts', NULL, 'frank_t'),
+('Music Mart', 'Instruments and music accessories', NULL, 'grace_y'),
+('Toy Town', 'Toys and games for kids of all ages', NULL, 'hannah_j'),
+('Home Haven', 'Furniture and decor for your home', NULL, 'ian_v'),
+('Pet Paradise', 'Everything for your furry friends', NULL, 'julia_s');
 GO

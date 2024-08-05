@@ -27,9 +27,9 @@ namespace TestAPI.Controllers
         }
         // POST: api/User
         [HttpGet]
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<IActionResult> GetUser(string username)
         {
-            var ret = await _userService.GetUser(id);
+            var ret = await _userService.GetUser(username);
             if (ret.Data == null)
                 return NotFound(ret);
             return Ok(ret);

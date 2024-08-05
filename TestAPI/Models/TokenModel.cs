@@ -10,6 +10,12 @@ namespace TestAPI.Models
         //public string JwtToken { get; set; }
         //public string RefreshToken { get; set; }
     }
+
+    public class TokenResponse
+    {
+        public string JwtToken { get; set; }
+        public string RefreshToken { get; set; }
+    }
     public class TokenRefreshRequest
     {
         public string Username { get; set; }

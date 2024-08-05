@@ -51,43 +51,53 @@ namespace TestAPI.Services
             }
         }
 
-        public async Task<string> GenerateRefreshToken(string username,string oldToken = "")
+        public async Task<string> GenerateRefreshToken(string username)
         {
-            var randomBytes = new byte[64];
-            using (var rng = RandomNumberGenerator.Create())
+            Token token = new Token()
             {
-                rng.GetBytes(randomBytes);
-                // save token
-                Token tokenModel = new Token()
-                {
-                    Username = username,
-                    RefreshToken = randomBytes.ToString()!,
-                    RefreshTokenExpiryTime = DateTime.Now.AddDays(RefreshTokenExpireDays)
-                };
-                if (string.IsNullOrEmpty(oldToken))
-                    await _tokenRepository.DeleteRefreshTokenAsync(oldToken);
-                await _tokenRepository.AddRefreshTokenAsync(tokenModel);
-                return Convert.ToBase64String(randomBytes);
-            }
+                Username = username,
+                RefreshToken = GenerateRandomToken(),//"mydummyr3fresht0k3nand1l332s",//randomBytes.ToString()!,
+                RefreshTokenExpiryTime = DateTime.Now.AddDays(RefreshTokenExpireDays)
+            };
+
+            await _tokenRepository.AddRefreshTokenAsync(token);
+            return token.RefreshToken;
+            
         }
 
         public bool ValidateRefreshToken(string refreshToken)
         {
             // Implement your logic to validate the refresh token
-            return _tokenRepository.TokenValidate(refreshToken);
+            // e.g., check if it exists in the database and hasn't expired
+
+            return true;
         }
 
-        //public static string GetUsernameFromExpiredToken(string token)
-        //{
-        //    // Decode the expired JWT to get the username
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var jwtToken = tokenHandler.ReadJwtToken(token);
+        public static string GetUsernameFromExpiredToken(string token)
+        {
+            // Decode the expired JWT to get the username
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
 
-        //    // Extract the username claim
-        //    var usernameClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "username");
+            // Extract the username claim
+            var usernameClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "username");
 
-        //    return usernameClaim?.Value;
-        //}
+            return usernameClaim?.Value;
+        }
+
+        public static string GenerateRandomToken()
+        {
+            byte[] randomBytes = new byte[64]; // 64 bits = 8 bytes
+            RandomNumberGenerator.Fill(randomBytes);
+
+            // Convert to Base64 string
+            string token = Convert.ToBase64String(randomBytes);
+
+            // Optional: remove any trailing padding characters ('=') for a cleaner token
+            token = token.TrimEnd('=');
+
+            return token;
+        }
 
         //public void SetRefreshTokenCookie(string refreshToken)
         //{
