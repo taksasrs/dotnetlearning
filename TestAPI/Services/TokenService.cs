@@ -53,7 +53,7 @@ namespace TestAPI.Services
 
         public async Task<string> GenerateRefreshToken(string username)
         {
-            _tokenRepository.RemoveTokenExists(username);
+            //_tokenRepository.RemoveTokenExists(username);
             Token token = new()
             {
                 Username = username,

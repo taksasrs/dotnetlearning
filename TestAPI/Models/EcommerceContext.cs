@@ -67,7 +67,9 @@ public partial class EcommerceContext : DbContext
                 .HasForeignKey(d => d.Username)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Username");
+
         });
+
 
         modelBuilder.Entity<User>(entity =>
         {

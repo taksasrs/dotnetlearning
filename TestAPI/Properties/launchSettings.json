@@ -9,6 +9,14 @@
     }
   },
   "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "http": {
       "commandName": "Project",
       "launchBrowser": true,
@@ -29,13 +37,15 @@
       },
       "dotnetRunMessages": true
     },
-    "IIS Express": {
-      "commandName": "IISExpress",
+    "ecommerce": {
+      "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "applicationUrl": "http://0.0.0.0:5050",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "dotnetRunMessages": true,
+      "http": "//0.0.0.0:5050"
     }
   }
 }
