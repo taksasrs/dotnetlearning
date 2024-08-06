@@ -17,6 +17,7 @@ namespace TestAPI.Repository
         Task<bool> AddUserAsync(User user);
         Task<bool> DeleteUserAsync(string username);
         public bool UserExists(string username);
+        Task<List<string>> GetUserRoles(string username);
     }
 
     public partial class UserRepository : IUserRepository
@@ -96,6 +97,17 @@ namespace TestAPI.Repository
         public bool UserExists(string username)
         {
             return _context.Users.Any(e => e.Username == username);
+        }
+
+        public async Task<List<string>> GetUserRoles(string username)
+        {
+            var ret = new List<string>();
+            var user = await _context.Roles.Where(x => x.Username == username).ToListAsync();
+            foreach (var roles in user)
+            {
+                ret.Add(roles.Role);
+            }
+            return ret;
         }
     }
 

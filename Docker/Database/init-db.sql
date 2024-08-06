@@ -28,7 +28,7 @@ CREATE TABLE [dbo].[Shop] (
     [CreateAt]    DATETIME        CONSTRAINT [DEFAULT_Shop_CreateAt] DEFAULT (getdate()) NULL,
     [Username]    VARCHAR (50)             NOT NULL,
     CONSTRAINT [PK_Shop] PRIMARY KEY CLUSTERED ([ShopID] ASC),
-    CONSTRAINT [Username] FOREIGN KEY ([Username]) REFERENCES [dbo].[User] ([Username])
+    CONSTRAINT [FK_Shop_Username] FOREIGN KEY ([Username]) REFERENCES [dbo].[User] ([Username])
 );
 GO
 
@@ -52,7 +52,15 @@ CREATE TABLE [dbo].[Token] (
     [Username] VARCHAR(50) NOT NULL,
     [RefreshToken] NVARCHAR(MAX) NOT NULL,
     [RefreshTokenExpiryTime] DATETIME NOT NULL,
-    CONSTRAINT [Username] FOREIGN KEY ([Username]) REFERENCES [dbo].[User] ([Username])
+    CONSTRAINT [FK_Token_Username] FOREIGN KEY ([Username]) REFERENCES [dbo].[User] ([Username])
+);
+GO
+
+CREATE TABLE [dbo].[UserRole] (
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [Username] VARCHAR(50) NOT NULL,
+    [Role] VARCHAR(30) NOT NULL,
+    CONSTRAINT [FK_UserRole_Username] FOREIGN KEY ([Username]) REFERENCES [dbo].[User] ([Username])
 );
 GO
 

@@ -8,6 +8,7 @@ using Azure;
 using TestAPI.Models;
 using Microsoft.IdentityModel.Tokens;
 using TestAPI.Repository;
+using StackExchange.Redis;
 
 namespace TestAPI.Services
 {
@@ -27,18 +28,27 @@ namespace TestAPI.Services
         private const double JwtExpireHours = 1; // JWT expiration time
         private const double RefreshTokenExpireDays = 7; // Refresh token expiration time
 
-        public string GenerateJwtToken(string username)
+        public string GenerateJwtToken(string username, List<string> roles)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secretKey);
             try
             {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, username),
+                    
+                };
+
+                // "User","Manager","Admin"
+                foreach (var role in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                    new Claim(ClaimTypes.Name, username)
-                    }),
+                    Subject = new ClaimsIdentity(claims),
                     Expires = DateTime.UtcNow.AddHours(JwtExpireHours),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
@@ -50,6 +60,35 @@ namespace TestAPI.Services
                 throw;
             }
         }
+
+        //public string GenerateJwtToken2(string user, IList<string> roles)
+        //{
+        //    var claims = new List<Claim>
+        //    {
+        //        new Claim(JwtRegisteredClaimNames.Sub, user),
+        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //        new Claim(ClaimTypes.Name, user)
+        //    };
+
+        //    // Add roles as claims
+        //    foreach (var role in roles)
+        //    {
+        //        claims.Add(new Claim(ClaimTypes.Role, role));
+        //    }
+
+        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
+        //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        //    var token = new JwtSecurityToken(
+        //        issuer: "your_issuer",
+        //        audience: "your_audience",
+        //        claims: claims,
+        //        expires: DateTime.Now.AddMinutes(60),
+        //        signingCredentials: creds);
+
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
+
 
         public async Task<string> GenerateRefreshToken(string username)
         {
@@ -65,6 +104,21 @@ namespace TestAPI.Services
             await _tokenRepository.AddRefreshTokenAsync(token);
             return token.RefreshToken;
             
+        }
+        public async Task<string> GenerateRefreshTokenAndRemoveExists(string username)
+        {
+            await _tokenRepository.RemoveTokenExistsAsync(username);
+            Token token = new()
+            {
+                Username = username,
+                RefreshToken = GenerateRandomToken(),//"mydummyr3fr35ht0k3nand1l332s",//randomBytes.ToString()!,
+                RefreshTokenExpiryTime = DateTime.Now.AddDays(RefreshTokenExpireDays)
+            };
+
+
+            await _tokenRepository.AddRefreshTokenAsync(token);
+            return token.RefreshToken;
+
         }
 
         public bool ValidateRefreshToken(string refreshToken)

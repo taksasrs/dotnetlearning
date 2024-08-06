@@ -16,13 +16,13 @@ namespace TestAPI.Services
     //    Task<bool> VerifyLoginAsync(string username, string password);
     //}
 
-    public partial class UserService 
+    public partial class UserService
     {
         private readonly IUserRepository _repository;
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
 
-        public UserService(IUserRepository repository,IConfiguration configuration, HttpClient httpClient)
+        public UserService(IUserRepository repository, IConfiguration configuration, HttpClient httpClient)
         {
             _repository = repository;
             _configuration = configuration;
@@ -52,9 +52,16 @@ namespace TestAPI.Services
         public async Task<ServiceResponse<User>> GetUser(string username)
         {
             var ret = new ServiceResponse<User>();
-            ret.Data =  await _repository.GetUserByUsernameAsync(username);
+            ret.Data = await _repository.GetUserByUsernameAsync(username);
             ret.Success = true;
+            return ret;
+        }
+
+        public async Task<List<string>> GetRoles(string username)
+        {
+            var ret = await _repository.GetUserRoles(username);
             return ret;
         }
     }
 }
+

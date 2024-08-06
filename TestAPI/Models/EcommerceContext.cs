@@ -23,6 +23,8 @@ public partial class EcommerceContext : DbContext
 
     public virtual DbSet<Token> Tokens { get; set; }
 
+    public virtual DbSet<UserRole> Roles { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=localhost;Database=ECommerce;User Id=sa;password=srs@2024;TrustServerCertificate=True;");
@@ -89,6 +91,22 @@ public partial class EcommerceContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<UserRole>(entity =>
+        {
+            entity.ToTable("UserRole");
+
+            entity.Property(e => e.Id).HasColumnName("Id");
+            entity.Property(e => e.Username)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Role)
+                .HasColumnName("Role");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Roles)
+                .HasForeignKey(d => d.Username)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Username");
+        });
         //modelBuilder.Entity<Token>(entity =>
         //{
         //    entity.ToTable("Token");

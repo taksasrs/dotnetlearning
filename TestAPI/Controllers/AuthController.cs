@@ -12,11 +12,13 @@ namespace TestAPI.Controllers
     {
         private readonly AuthService _authService;
         private readonly TokenService _tokenService;
+        private readonly UserService _userService;
 
-        public AuthController(AuthService authService, TokenService tokenService)
+        public AuthController(AuthService authService, TokenService tokenService, UserService userService)
         {
             _authService = authService;
             _tokenService = tokenService;
+            _userService = userService;
         }
 
         [HttpPost("/GenerateToken")]
@@ -29,7 +31,8 @@ namespace TestAPI.Controllers
             }
             TokenResponse dat = new();
             // Generate new tokens
-            dat.JwtToken = _tokenService.GenerateJwtToken(tokenRequest.Username);
+            var roles = await _userService.GetRoles(tokenRequest.Username);
+            dat.JwtToken = _tokenService.GenerateJwtToken(tokenRequest.Username,roles);
             dat.RefreshToken = await _tokenService.GenerateRefreshToken(tokenRequest.Username);
 
             return Ok(dat);
@@ -44,8 +47,9 @@ namespace TestAPI.Controllers
             }
 
             // For demonstration, let's just generate a new access token
-            var newJwtToken = _tokenService.GenerateJwtToken(tokenResponse.Username);
-            var newRefreshToken = await _tokenService.GenerateRefreshToken(tokenResponse.Username);
+            var roles = await _userService.GetRoles(tokenResponse.Username);
+            var newJwtToken = _tokenService.GenerateJwtToken(tokenResponse.Username,roles);
+            var newRefreshToken = await _tokenService.GenerateRefreshTokenAndRemoveExists(tokenResponse.Username);
             var response = new TokenResponse
             {
                 JwtToken = newJwtToken,
