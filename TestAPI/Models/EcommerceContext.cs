@@ -63,10 +63,10 @@ public partial class EcommerceContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Username).HasColumnName("Username");
 
-            // entity.HasOne(d => d.User).WithMany(p => p.Shops)
-            //     .HasForeignKey(d => d.UserId)
-            //     .OnDelete(DeleteBehavior.ClientSetNull)
-            //     .HasConstraintName("UserID");
+            entity.HasOne(d => d.User).WithMany(p => p.Shops)
+                .HasForeignKey(d => d.Username)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Username");
         });
 
         modelBuilder.Entity<User>(entity =>

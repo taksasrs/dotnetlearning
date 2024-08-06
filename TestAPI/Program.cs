@@ -22,11 +22,11 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 //{
 //    serverOptions.Listen(System.Net.IPAddress.Any, 5000);
 //});
-builder.WebHost.ConfigureKestrel(options =>
-{
-    //options.ListenAnyIP(5000); // HTTP port
-    options.ListenAnyIP(5001, listenOptions => listenOptions.UseHttps()); // HTTPS port
-});
+// builder.WebHost.ConfigureKestrel(options =>
+// {
+//     //options.ListenAnyIP(5000); // HTTP port
+//     options.ListenAnyIP(5001, listenOptions => listenOptions.UseHttps()); // HTTPS port
+// });
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 //JWT Config
@@ -55,7 +55,18 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
 });
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            // policy.WithOrigins("*")
+            //  .WithMethods("PUT", "DELETE", "GET", "POST");
+             policy.WithOrigins("http://localhost:3000")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 //init connection string
 builder.Services.AddDbContext<EcommerceContext>(options =>
@@ -111,6 +122,8 @@ builder.Services.AddSwaggerGen(opt =>
 });
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+// builder.WebHost.UseUrls("http://0.0.0.0:5000");
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 //app.UseMiddleware<TokenValidationMiddleware>();
@@ -126,6 +139,8 @@ app.UseAuthentication();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors();
 
 //app.UseEndpoints(endpoints =>
 //{

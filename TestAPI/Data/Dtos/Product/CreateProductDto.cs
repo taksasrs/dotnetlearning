@@ -8,6 +8,8 @@ namespace TestAPI.Data.Dtos.Product
 {
     public class CreateProductDto
     {
+        public int? ShopId { get; set; }
+
         [Required]
         public string Name { get; set; } = null!;
 

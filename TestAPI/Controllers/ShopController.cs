@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TestAPI.Data.Dtos;
+using TestAPI.Data.Dtos.Shop;
 using TestAPI.Models;
 using TestAPI.Services;
 
@@ -25,19 +25,26 @@ namespace TestAPI.Controllers
             return Ok(data);
         }
 
+       
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetShopById(int id){
+            var data = await _shopService.GetShopById(id);
+            return Ok(data);
+        }
+        
         [HttpPost]
         public async Task<IActionResult> CreateShop(CreateShopDto shop){
             var data = await _shopService.CreateShop(shop);
             return Ok(data);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateShop(int id, UpdateShopDto shop){
             var data = await _shopService.EditShop(id, shop);
             return Ok(data);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShop(int id){
             var data = await _shopService.DeleteShop(id);
             return Ok(data);

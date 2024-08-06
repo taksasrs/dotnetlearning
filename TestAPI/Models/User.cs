@@ -15,5 +15,5 @@ public partial class User
 
     public DateTime? CreateAt { get; set; }
 
-    //public virtual ICollection<Shop> Shops { get; set; } = new List<Shop>();
+    public virtual ICollection<Shop> Shops { get; set; } = new List<Shop>();
 }
