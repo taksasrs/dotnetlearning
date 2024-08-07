@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TestAPI.Data.Dtos.Product;
+using TestAPI.Data.Dtos.Products;
 using TestAPI.Services;
 
 namespace TestAPI.Controllers
@@ -23,8 +23,14 @@ namespace TestAPI.Controllers
         }
 
          [HttpGet]
-        public async Task<IActionResult> GetAllShop(){
-            var data = await _productService.GetAllProduct();
+        public async Task<IActionResult> GetAllProduct(int pageNumber = 1, int pageSize = 10){
+            var data = await _productService.GetAllProduct(pageNumber, pageSize);
+            return Ok(data);
+        }
+
+        [HttpGet("{shopId}")]
+        public async Task<IActionResult> GetAllProductByShopId(int shopId, int pageNumber = 1, int pageSize = 10){
+            var data = await _productService.GetProductsByShopId(shopId, pageNumber, pageSize);
             return Ok(data);
         }
 
@@ -34,13 +40,13 @@ namespace TestAPI.Controllers
             return Ok(data);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateShop(int id, UpdateProductDto product){
             var data = await _productService.EditProduct(id, product);
             return Ok(data);
         }
 
-        [HttpDelete]
+         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShop(int id){
             var data = await _productService.DeleteProduct(id);
             return Ok(data);

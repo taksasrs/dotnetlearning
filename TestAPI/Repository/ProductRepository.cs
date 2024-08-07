@@ -6,28 +6,46 @@ using TestAPI.Models;
 using System.Transactions;
 using System.Data.Entity;
 using Microsoft.AspNetCore.Mvc;
+using TestAPI.Helpers;
+using TestAPI.Data.Dtos.Products;
+using AutoMapper;
 
 
 namespace TestAPI.Repository
 {
     public partial interface IWebRepository
     {
-        Task<IEnumerable<Product>> GetProductAll();
+        Task<ProductDto> GetProductAll(int pageNumber, int pageSize);
         Task<Product> GetProductByIdAsync(int productId);
+        Task<ProductDto> GetProductsByShopId(int shopId, int pageNumber, int pageSize);
         Task<bool> AddProductAsync(Product prod);
         Task<bool> UpdateProductAsync(int id, Product prod);
         Task<bool> DeleteProductAsync(int id);
         public bool ProductExists(int productId);
-
         public bool ProductExistsByName(string name);
     }
 
     public partial class WebRepository : IWebRepository
     {
 
-        public async Task<IEnumerable<Product>>GetProductAll(){
+        // private readonly IMapper _mapper;
+
+        // public WebRepository(IMapper mapper)
+        // {
+        //     _mapper = mapper;
+        // }
+
+        public async Task<ProductDto> GetProductAll(int pageNumber, int pageSize)
+        {
             var data = await _context.Products.ToListAsync();
-            return data;
+            var paginatedData = new PaginatedList<Product>(data, pageNumber, pageSize);
+
+
+            var productDto = new ProductDto();
+            productDto.content = paginatedData;
+            productDto.pageable = paginatedData.paginateDto;
+
+            return productDto;
         }
         public async Task<Product> GetProductByIdAsync(int productId)
         {
@@ -35,20 +53,40 @@ namespace TestAPI.Repository
 
             return prod;
         }
+        public async Task<ProductDto> GetProductsByShopId(int shopId, int pageNumber, int pageSize)
+        {
+            var prod = await _context.Products.ToListAsync();
+
+            // var data = prod.Where( p => p.ShopId == shopId);
+            var data = _mapper.Map<List<Product>>(prod.Where(p => p.ShopId == shopId));
+            // var data = (List<Product>) prod.Where(p => p.ShopId == shopId);
+
+            var paginatedData = new PaginatedList<Product>(data, pageNumber, pageSize);
+
+            var productDto = new ProductDto();
+            productDto.content = paginatedData;
+            productDto.pageable = paginatedData.paginateDto;
+
+            return productDto;
+        }
         public bool ProductExists(int productId)
         {
             return _context.Products.Any(e => e.ProductId == productId);
         }
 
-        public bool ProductExistsByName(string name){
+        public bool ProductExistsByName(string name)
+        {
             var data = _context.Products.FirstOrDefault(p => p.Name.Equals(name));
-            if(data != null){
+            if (data != null)
+            {
                 return true;
-            }else{
+            }
+            else
+            {
                 return false;
             }
         }
-         public async Task<bool> AddProductAsync(Product product)
+        public async Task<bool> AddProductAsync(Product product)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -60,7 +98,7 @@ namespace TestAPI.Repository
                 }
                 else
                     transaction.Rollback();
-                    return false;
+                return false;
             }
         }
 

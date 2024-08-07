@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TestAPI.Models;
 using System.Transactions;
 using System.Data.Entity;
+using AutoMapper;
 
 
 namespace TestAPI.Repository
@@ -13,9 +14,12 @@ namespace TestAPI.Repository
     {
         private readonly EcommerceContext _context;
 
-        public WebRepository(EcommerceContext context)
+         private readonly IMapper _mapper;
+
+        public WebRepository(EcommerceContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
     }
 }

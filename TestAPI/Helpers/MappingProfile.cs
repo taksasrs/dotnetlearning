@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using TestAPI.Data.Dtos.Shop;
-using TestAPI.Data.Dtos.Product;
+using TestAPI.Data.Dtos.Shops;
+using TestAPI.Data.Dtos.Products;
 using TestAPI.Models;
 
 namespace TestAPI.Helpers

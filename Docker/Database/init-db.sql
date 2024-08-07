@@ -93,3 +93,18 @@ VALUES
 ('Home Haven', 'Furniture and decor for your home', NULL, 'ian_v'),
 ('Pet Paradise', 'Everything for your furry friends', NULL, 'julia_s');
 GO
+
+-- Insert mock data into the Product table
+INSERT INTO [dbo].[Product] ([Name], [Description], [Image], [Price], [Stock], [ShopID])
+VALUES 
+('Wireless Mouse', 'Ergonomic wireless mouse with adjustable DPI and programmable buttons', NULL, 25.99, 150, 1),
+('Mechanical Keyboard', 'RGB backlit mechanical keyboard with blue switches and detachable wrist rest', NULL, 89.99, 80, 1),
+('Gaming Headset', 'Over-ear gaming headset with surround sound and noise-cancelling microphone', NULL, 59.99, 120, 2),
+('4K Monitor', '27-inch 4K UHD monitor with HDR and ultra-thin bezel', NULL, 349.99, 50, 2),
+('External Hard Drive', '1TB portable external hard drive with USB 3.0 connectivity', NULL, 69.99, 200, 3),
+('Smartphone', 'Latest model smartphone with 128GB storage and 5G connectivity', NULL, 699.99, 30, 3),
+('Bluetooth Speaker', 'Portable Bluetooth speaker with waterproof design and long battery life', NULL, 39.99, 300, 1),
+('Fitness Tracker', 'Water-resistant fitness tracker with heart rate monitor and GPS', NULL, 49.99, 250, 2),
+('Smartwatch', 'Smartwatch with customizable watch faces and health tracking features', NULL, 199.99, 100, 3),
+('Laptop Stand', 'Adjustable laptop stand with cooling fan and USB hub', NULL, 29.99, 400, 1);
+GO

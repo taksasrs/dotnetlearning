@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TestAPI.Data.Dtos.Shop;
+using TestAPI.Data.Dtos.Shops;
 using TestAPI.Models;
 using TestAPI.Services;
 
@@ -20,13 +21,14 @@ namespace TestAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllShop(){
-            var data = await _shopService.GetAllshop();
+        public async Task<IActionResult> GetAllShop(int pageNumber = 1, int pageSize = 10){
+            var data = await _shopService.GetAllshop(pageNumber, pageSize);
             return Ok(data);
         }
 
        
         [HttpGet("{id}")]
+        // [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetShopById(int id){
             var data = await _shopService.GetShopById(id);
             return Ok(data);

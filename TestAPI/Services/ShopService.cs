@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 using DocumentFormat.OpenXml.Spreadsheet;
-using TestAPI.Data.Dtos.Shop;
+using TestAPI.Data.Dtos.Shops;
 //using TestAPI.Repository;
 using AutoMapper;
 
@@ -28,15 +28,15 @@ namespace TestAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Shop>> GetAllshop(){
-            var data = await _repository.GetAllShop();
+        public async Task<ShopDto> GetAllshop(int pageNumber, int pageSize){
+            var data = await _repository.GetAllShop(pageNumber, pageSize);
             return data;
         }
 
         public async Task<Shop> GetShopById(int id){
             var data = await _repository.GetShopByIdAsync(id);
             return data;
-        }
+        }     
 
         public async Task<ServiceResponse<object>> CreateShop(CreateShopDto shop)
         {

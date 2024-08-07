@@ -8,12 +8,14 @@ using System.Data.Entity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using TestAPI.Helpers;
+using TestAPI.Data.Dtos.Shops;
 
 namespace TestAPI.Repository
 {
     public partial interface IWebRepository
     {
-        Task<IEnumerable<Shop>> GetAllShop();
+        Task<ShopDto>  GetAllShop(int pageNumber, int pageSize);
         Task<Shop> GetShopByIdAsync(int shopId);
         Task<bool> AddShopAsync(Shop shop);
         Task<bool> UpdateShopAsync(int id, Shop shop);
@@ -25,14 +27,23 @@ namespace TestAPI.Repository
 
     public partial class WebRepository : IWebRepository
     {
-        public async Task<IEnumerable<Shop>> GetAllShop(){
+
+        public async Task<ShopDto> GetAllShop(int pageNumber, int pageSize)
+        {
             var data = await _context.Shops.ToListAsync();
-            return data;
+            var paginatedData = new PaginatedList<Shop>(data, pageNumber, pageSize);
+
+            // int totalPages = paginatedData.TotalPages;
+
+            var shopDto = new ShopDto();
+            shopDto.content = paginatedData;
+            shopDto.pageable = paginatedData.paginateDto;
+
+            return shopDto;
         }
         public async Task<Shop> GetShopByIdAsync(int shopId)
         {
             var shop = await _context.Shops.FindAsync(shopId);
-
             return shop;
         }
 
@@ -48,7 +59,7 @@ namespace TestAPI.Repository
                 }
                 else
                     transaction.Rollback();
-                    return false;
+                return false;
             }
         }
 
@@ -102,14 +113,17 @@ namespace TestAPI.Repository
             return _context.Shops.Any(e => e.ShopId == shopId);
         }
 
-        public bool ShopExistsByName(string name){
+        public bool ShopExistsByName(string name)
+        {
             var data = _context.Shops.FirstOrDefault(s => s.Name.Equals(name));
-            if(data != null){
+            if (data != null)
+            {
                 return true;
-            }else{
+            }
+            else
+            {
                 return false;
             }
         }
     }
-
 }

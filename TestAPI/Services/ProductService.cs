@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TestAPI.Data.Dtos.Product;
+using TestAPI.Data.Dtos.Products;
 using TestAPI.Models;
 using TestAPI.Repository;
 
@@ -22,8 +22,18 @@ namespace TestAPI.Services
             _mapper = mapper;
         }
 
-        public async   Task<IEnumerable<Product>> GetAllProduct(){
-            var data = await _repository.GetProductAll();
+        public async Task<ProductDto> GetAllProduct(int pageNumber , int pageSize){
+            var data = await _repository.GetProductAll(pageNumber, pageSize);
+            return data;
+        }
+
+        public async Task<Product> GetProductById(int id){
+            var data = await _repository.GetProductByIdAsync(id);
+            return data;
+        }
+
+        public async Task<ProductDto> GetProductsByShopId(int shopId, int pageNumber, int pageSize){
+            var data = await _repository.GetProductsByShopId(shopId, pageNumber, pageSize);
             return data;
         }
 

@@ -18,12 +18,12 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 });
 
 //Configure Kestrel to listen on 0.0.0.0
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.Listen(System.Net.IPAddress.Any, 5050);
-});
+// builder.WebHost.ConfigureKestrel(serverOptions =>
+// {
+//     serverOptions.Listen(System.Net.IPAddress.Any, 5050);
+// });
 
-builder.WebHost.UseUrls("http://0.0.0.0:5050");
+// builder.WebHost.UseUrls("http://0.0.0.0:5050");
 
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

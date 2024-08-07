@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TestAPI.Data.Dtos.Shop
+namespace TestAPI.Data.Dtos.Shops
 {
     public class CreateShopDto
     {

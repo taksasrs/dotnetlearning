@@ -4,21 +4,22 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TestAPI.Data.Dtos.Product
+namespace TestAPI.Data.Dtos.Shops
 {
-    public class CreateProductDto
+    public class UpdateShopDto
     {
-        public int? ShopId { get; set; }
+        [Required]
+        public int ShopId { get; set; }
 
         [Required]
         public string Name { get; set; } = null!;
 
+        [Required]
         public string? Description { get; set; }
 
         public byte[]? Image { get; set; }
+
         [Required]
-        public double Price { get; set; }
-        [Required]
-        public int Stock { get; set; }
+        public string Username { get; set; }
     }
 }
