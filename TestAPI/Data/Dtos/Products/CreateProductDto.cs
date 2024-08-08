@@ -16,9 +16,12 @@ namespace TestAPI.Data.Dtos.Products
         public string? Description { get; set; }
 
         public byte[]? Image { get; set; }
+        
         [Required]
         public double Price { get; set; }
+
         [Required]
         public int Stock { get; set; }
+        public string? ImageName { get; set;}
     }
 }

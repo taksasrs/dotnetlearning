@@ -106,7 +106,7 @@ namespace TestAPI.Repository
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
-                if (id != product.ShopId)
+                if (id != product.ProductId)
                 {
                     transaction.Rollback();
                     return false;

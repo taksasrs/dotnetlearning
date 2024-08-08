@@ -26,7 +26,8 @@ CREATE TABLE [dbo].[Shop] (
     [Description] VARCHAR (MAX)   NULL,
     [Image]       VARBINARY (MAX) NULL,
     [CreateAt]    DATETIME        CONSTRAINT [DEFAULT_Shop_CreateAt] DEFAULT (getdate()) NULL,
-    [Username]    VARCHAR (50)             NOT NULL,
+    [Username]    VARCHAR (50)    NOT NULL,
+    [ImageName]   VARCHAR (50)    NULL,
     CONSTRAINT [PK_Shop] PRIMARY KEY CLUSTERED ([ShopID] ASC),
     CONSTRAINT [FK_Shop_Username] FOREIGN KEY ([Username]) REFERENCES [dbo].[User] ([Username])
 );
@@ -42,6 +43,7 @@ CREATE TABLE [dbo].[Product] (
     [Stock]       INT             NOT NULL,
     [CreateAt]    DATETIME        CONSTRAINT [DEFAULT_Product_CreateAt] DEFAULT (getdate()) NULL,
     [ShopID]      INT             NOT NULL,
+    [ImageName]   VARCHAR (50)    NULL,
     CONSTRAINT [PK_Product] PRIMARY KEY CLUSTERED ([ProductID] ASC),
     CONSTRAINT [ShopID] FOREIGN KEY ([ShopID]) REFERENCES [dbo].[Shop] ([ShopID])
 );

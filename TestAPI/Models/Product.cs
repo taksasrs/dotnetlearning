@@ -21,5 +21,7 @@ public partial class Product
 
     public int ShopId { get; set; }
 
+    public string? ImageName { get; set;}
+
     public virtual Shop Shop { get; set; } = null!;
 }

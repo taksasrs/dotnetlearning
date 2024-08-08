@@ -21,5 +21,7 @@ namespace TestAPI.Data.Dtos.Shops
 
         [Required]
         public string Username { get; set; }
+
+        public string? ImageName { get; set;}
     }
 }
