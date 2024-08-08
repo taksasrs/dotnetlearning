@@ -32,7 +32,7 @@ namespace TestAPI.Controllers
             TokenResponse dat = new();
             // Generate new tokens
             var roles = await _userService.GetRoles(tokenRequest.Username);
-            dat.JwtToken = _tokenService.GenerateJwtToken(tokenRequest.Username,roles);
+            dat.JwtToken = await _tokenService.GenerateJwtToken(tokenRequest.Username);
             dat.RefreshToken = await _tokenService.GenerateRefreshToken(tokenRequest.Username);
 
             return Ok(dat);
@@ -48,7 +48,7 @@ namespace TestAPI.Controllers
 
             // For demonstration, let's just generate a new access token
             var roles = await _userService.GetRoles(tokenResponse.Username);
-            var newJwtToken = _tokenService.GenerateJwtToken(tokenResponse.Username,roles);
+            var newJwtToken = await _tokenService.GenerateJwtToken(tokenResponse.Username);
             var newRefreshToken = await _tokenService.GenerateRefreshTokenAndRemoveExists(tokenResponse.Username);
             var response = new TokenResponse
             {

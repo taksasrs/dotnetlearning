@@ -75,6 +75,7 @@ namespace TestAPI.Services
                 throw;
             }
             return ret;
+
         }
 
         public async Task<ServiceResponse<User>> GetUser(string username)

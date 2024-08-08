@@ -17,18 +17,20 @@ namespace TestAPI.Services
         private readonly IConfiguration _configuration;
         private readonly string _secretKey;
         private readonly ITokenRepository _tokenRepository;
+        private readonly IUserRepository _userRepository;
 
-        public TokenService(IConfiguration configuration, ITokenRepository tokenRepository)
+        public TokenService(IConfiguration configuration, ITokenRepository tokenRepository, IUserRepository userRepository)
         {
             _configuration = configuration;
             _secretKey = configuration["JwtSettings:SecretKey"]!;
             _tokenRepository = tokenRepository;
+            _userRepository = userRepository;
         }
 
         private const double JwtExpireHours = 1; // JWT expiration time
         private const double RefreshTokenExpireDays = 7; // Refresh token expiration time
 
-        public string GenerateJwtToken(string username, List<string> roles)
+        public async Task<string> GenerateJwtToken(string username)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secretKey);
@@ -39,7 +41,7 @@ namespace TestAPI.Services
                     new Claim(ClaimTypes.Name, username),
                     
                 };
-
+                var roles = await _userRepository.GetUserRoles(username);
                 // "User","Manager","Admin"
                 foreach (var role in roles)
                 {
