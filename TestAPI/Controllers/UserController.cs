@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using TestAPI.Models;
 using TestAPI.Services;
 using Microsoft.AspNetCore.Authorization;
+using TestAPI.Data.Dtos.User;
+using AutoMapper;
 
 namespace TestAPI.Controllers
 {
@@ -13,6 +15,7 @@ namespace TestAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        
 
         public UserController(UserService userService)
         {
@@ -21,8 +24,10 @@ namespace TestAPI.Controllers
 
         // POST: api/User
         [HttpPost]
-        public async Task<IActionResult> PostMovie(User user)
+        public async Task<IActionResult> PostMovie(UserDto user)
         {
+            //var user = _mapper.Map<User>(usermap);
+
             var createdUser = await _userService.CreateUser(user);
             return Ok(createdUser);
         }

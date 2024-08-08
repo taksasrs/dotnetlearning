@@ -44,8 +44,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "dotnetRunMessages": true,
-      "http": "//0.0.0.0:5050"
+      "http": "//0.0.0.0:5050",
+      "dotnetRunMessages": true
     }
   }
 }

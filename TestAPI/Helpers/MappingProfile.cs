@@ -6,6 +6,7 @@ using AutoMapper;
 using TestAPI.Data.Dtos.Shops;
 using TestAPI.Data.Dtos.Products;
 using TestAPI.Models;
+using TestAPI.Data.Dtos.User;
 
 namespace TestAPI.Helpers
 {
@@ -21,6 +22,9 @@ namespace TestAPI.Helpers
             CreateMap<CreateProductDto, Product>();
             CreateMap<Product, UpdateProductDto>();
             CreateMap<UpdateProductDto, Product>();
+
+            CreateMap<UserDto, User>()
+            .ForMember(dest => dest.Roles, opt => opt.Ignore());
         }
     }
     

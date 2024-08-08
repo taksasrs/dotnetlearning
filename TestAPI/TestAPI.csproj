@@ -34,6 +34,7 @@
     <None Remove="Repository\" />
     <None Remove="Data\" />
     <None Remove="Middleware\" />
+    <None Remove="Data\Dtos\User\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -41,6 +42,7 @@
     <Folder Include="Repository\" />
     <Folder Include="Data\" />
     <Folder Include="Middleware\" />
+    <Folder Include="Data\Dtos\User\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />

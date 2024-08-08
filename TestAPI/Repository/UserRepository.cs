@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TestAPI.Models;
 using System.Transactions;
 using System.Data.Entity;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 
 namespace TestAPI.Repository
@@ -18,6 +19,7 @@ namespace TestAPI.Repository
         Task<bool> DeleteUserAsync(string username);
         public bool UserExists(string username);
         Task<List<string>> GetUserRoles(string username);
+        void AddUserRoles(List<UserRole> roles,string username);
     }
 
     public partial class UserRepository : IUserRepository
@@ -109,6 +111,14 @@ namespace TestAPI.Repository
             }
             return ret;
         }
-    }
 
+        public void AddUserRoles(List<UserRole> roles,string username)
+        {
+            foreach (var role in roles)
+            {
+                role.Username = username;
+                _context.Roles.Add(role);
+            }
+        }
+    }
 }
