@@ -51,7 +51,7 @@ namespace TestAPI.Services
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.UtcNow.AddHours(JwtExpireHours),
+                    Expires = DateTime.UtcNow.AddMinutes(JwtExpireHours),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -128,7 +128,7 @@ namespace TestAPI.Services
             // Implement your logic to validate the refresh token
             // e.g., check if it exists in the database and hasn't expired
 
-            return true;
+            return _tokenRepository.TokenValidate(refreshToken);
         }
 
         public static string GetUsernameFromExpiredToken(string token)

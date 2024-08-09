@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestAPI.Data.Dtos.Products;
 using TestAPI.Services;
@@ -24,6 +25,7 @@ namespace TestAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllProduct(int pageNumber = 1, int pageSize = 10)
         {
             var data = await _productService.GetAllProduct(pageNumber, pageSize);
@@ -45,6 +47,7 @@ namespace TestAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateShop(CreateProductDto product)
         {
             var data = await _productService.CreateProduct(product);
@@ -52,6 +55,7 @@ namespace TestAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateShop(int id, UpdateProductDto product)
         {
             var data = await _productService.EditProduct(id, product);
@@ -59,6 +63,7 @@ namespace TestAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteShop(int id)
         {
             var data = await _productService.DeleteProduct(id);

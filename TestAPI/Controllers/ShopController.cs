@@ -35,18 +35,21 @@ namespace TestAPI.Controllers
         }
         
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateShop(CreateShopDto shop){
             var data = await _shopService.CreateShop(shop);
             return Ok(data);
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateShop(int id, UpdateShopDto shop){
             var data = await _shopService.EditShop(id, shop);
             return Ok(data);
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteShop(int id){
             var data = await _shopService.DeleteShop(id);
             return Ok(data);

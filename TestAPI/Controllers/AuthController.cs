@@ -49,7 +49,9 @@ namespace TestAPI.Controllers
             // For demonstration, let's just generate a new access token
             var roles = await _userService.GetRoles(tokenResponse.Username);
             var newJwtToken = await _tokenService.GenerateJwtToken(tokenResponse.Username);
-            var newRefreshToken = await _tokenService.GenerateRefreshTokenAndRemoveExists(tokenResponse.Username);
+            //var newRefreshToken = await _tokenService.GenerateRefreshTokenAndRemoveExists(tokenResponse.Username);
+            var newRefreshToken = await _tokenService.GenerateRefreshToken(tokenResponse.Username);
+
             var response = new TokenResponse
             {
                 JwtToken = newJwtToken,

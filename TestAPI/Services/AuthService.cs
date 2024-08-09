@@ -49,7 +49,7 @@ namespace TestAPI.Services
                     string chatID = user.ChatId;  //7473964948
                     //generate otp and save to redis
                     var otp = await GenerateAndSaveOtpAsync(user.Username);
-                    string otpstring = $"Your OTP: {otp} will expire in 1 min 30 sec";
+                    string otpstring = $"Your OTP: {otp} will expire in 5 min";
                     string urlString = $"https://api.telegram.org/bot{apilToken}/sendMessage?chat_id={chatID}&text={otpstring}";
 
                     HttpResponseMessage response = await _httpClient.GetAsync(urlString);
