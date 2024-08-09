@@ -45,7 +45,4 @@
   <ItemGroup>
     <None Include="..\.editorconfig" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Models\Shop.cs" />
-  </ItemGroup>
 </Project>
