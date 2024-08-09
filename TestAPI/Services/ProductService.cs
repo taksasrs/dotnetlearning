@@ -29,6 +29,7 @@ namespace TestAPI.Services
 
         public async Task<Product> GetProductById(int id){
             var data = await _repository.GetProductByIdAsync(id);
+            
             return data;
         }
 

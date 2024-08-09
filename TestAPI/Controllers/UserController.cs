@@ -29,6 +29,9 @@ namespace TestAPI.Controllers
             //var user = _mapper.Map<User>(usermap);
 
             var createdUser = await _userService.CreateUser(user);
+            if(createdUser.Success == false){
+                return BadRequest(createdUser);
+            }
             return Ok(createdUser);
         }
         // POST: api/User
