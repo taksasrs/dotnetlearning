@@ -9,7 +9,8 @@ public partial class User
     [Key]
     public string Username { get; set; }
     [Required]
-    public string Password { get; set; }
+    public byte[] Password { get; set; }
+    public byte[] PasswordSalt { get; set; }
     [Required]
     public string ChatId { get; set; }
     public DateTime? CreateAt { get; set; }

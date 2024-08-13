@@ -9,6 +9,8 @@ using StackExchange.Redis;
 using DocumentFormat.OpenXml.Spreadsheet;
 using TestAPI.Data.Dtos.User;
 using AutoMapper;
+using System.Security.Cryptography;
+using System.Text;
 //using TestAPI.Repository;
 
 namespace TestAPI.Services
@@ -37,11 +39,13 @@ namespace TestAPI.Services
             var ret = new ServiceResponse<object>();
             try
             {
+                var hash = CreatePasswordHash(usermap.Password);
                 //var user = _mapper.Map<User>(usermap);
                 var user = new User
                 {
                     Username = usermap.Username,
-                    Password = usermap.Password,
+                    Password = hash.passwordHash,
+                    PasswordSalt = hash.passwordSalt,
                     ChatId = usermap.ChatId,
                     CreateAt = DateTime.UtcNow,
                 };
@@ -76,6 +80,24 @@ namespace TestAPI.Services
             }
             return ret;
 
+        }
+        public (byte[] passwordHash, byte[] passwordSalt) CreatePasswordHash(string password)
+        {
+            using (var hmac = new HMACSHA256())
+            {
+                var salt = hmac.Key;
+                var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return (passwordHash, salt);
+            }
+        }
+
+        public bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        {
+            using (var hmac = new HMACSHA256(storedSalt))
+            {
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(storedHash);
+            }
         }
 
         public async Task<ServiceResponse<User>> GetUser(string username)

@@ -12,10 +12,12 @@ GO
 -- Create User table
 CREATE TABLE [dbo].[User] (
     [Username] VARCHAR (50)  NOT NULL,
-    [Password] VARCHAR (MAX) NOT NULL,
+    [Password] VARBINARY(256) NOT NULL,
+    [PasswordSalt] VARBINARY(256) NOT NULL,
     [ChatID]   VARCHAR (50)  NOT NULL,
     [CreateAt] DATETIME      CONSTRAINT [DEFAULT_User_CreateAt] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([Username] ASC)
+    ON DELETE CASCADE
 );
 GO
 
@@ -30,6 +32,7 @@ CREATE TABLE [dbo].[Shop] (
     [ImageName]   VARCHAR (50)    NULL,
     CONSTRAINT [PK_Shop] PRIMARY KEY CLUSTERED ([ShopID] ASC),
     CONSTRAINT [FK_Shop_Username] FOREIGN KEY ([Username]) REFERENCES [dbo].[User] ([Username])
+    ON DELETE CASCADE
 );
 GO
 
@@ -45,7 +48,8 @@ CREATE TABLE [dbo].[Product] (
     [ShopID]      INT             NOT NULL,
     [ImageName]   VARCHAR (50)    NULL,
     CONSTRAINT [PK_Product] PRIMARY KEY CLUSTERED ([ProductID] ASC),
-    CONSTRAINT [ShopID] FOREIGN KEY ([ShopID]) REFERENCES [dbo].[Shop] ([ShopID])
+    CONSTRAINT [FK_Product_Shop] FOREIGN KEY ([ShopID]) REFERENCES [dbo].[Shop] ([ShopID])
+    ON DELETE CASCADE
 );
 GO
 

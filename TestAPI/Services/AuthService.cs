@@ -21,13 +21,15 @@ namespace TestAPI.Services
         private readonly IConfiguration _configuration;
         private readonly RedisCacheService _redisCacheService;
         private readonly HttpClient _httpClient;
+        private readonly UserService _userService;
 
-        public AuthService(IUserRepository repository,IConfiguration configuration, RedisCacheService redisCacheService, HttpClient httpClient)
+        public AuthService(IUserRepository repository,IConfiguration configuration, RedisCacheService redisCacheService, HttpClient httpClient,UserService userService)
         {
             _repository = repository;
             _configuration = configuration;
             _redisCacheService = redisCacheService;
             _httpClient = httpClient;
+            _userService = userService;
         }
 
         public async Task<ServiceResponse<string>> VerifyLoginAsync(string username,string password)
@@ -37,12 +39,14 @@ namespace TestAPI.Services
             try
             {
                 var user = await _repository.GetUserByUsernameAsync(username);
+                //get hash pw and salt
+                var hash = _userService.VerifyPasswordHash(password,user.Password,user.PasswordSalt);
                 if (user == null)
                 {
                     ret.ErrorMessage = "Invalid credentials";
                     return ret;
                 }
-                if (user.Username != null && user.Password == password)
+                if (user.Username != null && hash)
                 {
                     //valid login
                     string apilToken = _configuration["TelegramApiToken"];
@@ -94,7 +98,10 @@ namespace TestAPI.Services
         {
             var realOtp = await _redisCacheService.GetStringAsync(username);
             if (realOtp == otp)
+            {
+                _redisCacheService.RemoveKey(username);
                 return true;
+            }
             else
                 return false;
         }

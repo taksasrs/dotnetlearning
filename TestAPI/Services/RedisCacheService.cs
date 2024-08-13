@@ -17,7 +17,12 @@ public class RedisCacheService
     }
 
     public async Task<string> GetStringAsync(string key)
-    {
+    { 
         return await _database.StringGetAsync(key);
+    }
+
+    public void RemoveKey(string key)
+    {
+        _database.KeyDelete(key);
     }
 }

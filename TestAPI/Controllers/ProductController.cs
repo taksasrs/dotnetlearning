@@ -25,7 +25,7 @@ namespace TestAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAllProduct(int pageNumber = 1, int pageSize = 10)
         {
             var data = await _productService.GetAllProduct(pageNumber, pageSize);

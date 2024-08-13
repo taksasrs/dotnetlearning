@@ -132,7 +132,7 @@ namespace TestAPI.Repository
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
-                var shop = await _context.Shops.FindAsync(id);
+                var shop = await _context.Products.FindAsync(id);
 
                 if (shop == null)
                 {
@@ -140,7 +140,7 @@ namespace TestAPI.Repository
                     return false;
                 }
 
-                _context.Shops.Remove(shop);
+                _context.Products.Remove(shop);
                 await _context.SaveChangesAsync();
                 transaction.Commit();
                 return true;
