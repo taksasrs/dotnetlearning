@@ -86,6 +86,8 @@ builder.Services.AddScoped<ShopService>();
 builder.Services.AddScoped<ProductService>();
 // builder.Services.AddScoped<ShopService>();
 
+builder.Services.AddSignalR();
+
 // Register controllers
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -130,7 +132,10 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseRouting(); // Ensure UseRouting is called here
 
 app.UseAuthentication();
 
@@ -140,10 +145,17 @@ app.UseAuthorization();
 
 app.UseCors();
 
+app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();    
+        endpoints.MapHub<DataHub>("/api/chat");
+    });
+
 //app.UseEndpoints(endpoints =>
 //{
 //    endpoints.MapControllers();    
 //});
+
 app.MapControllers();
 
 app.Run();
