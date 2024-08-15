@@ -78,7 +78,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWebRepository, WebRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
-var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "ecommerce.redis.cache.windows.net";
 builder.Services.AddSingleton(new RedisCacheService(redisConnectionString));
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
