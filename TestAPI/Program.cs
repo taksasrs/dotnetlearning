@@ -60,7 +60,7 @@ builder.Services.AddCors(options =>
         {
             // policy.WithOrigins("*")
             //  .WithMethods("PUT", "DELETE", "GET", "POST");
-             policy.WithOrigins("http://localhost:3000", "http://localhost:7098", "http://192.168.0.97:8123")
+             policy.WithOrigins("http://localhost:3000", "http://localhost:7098", "http://192.168.0.97:8123", "http://192.168.1.73:7098", "http://192.168.1.73:3000")
                    .AllowAnyHeader()
                    .AllowAnyMethod()
                    .AllowCredentials();

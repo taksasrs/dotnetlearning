@@ -12,8 +12,7 @@
     "ecommerce": {
       "commandName": "Project",
       "launchBrowser": true,
-      // "applicationUrl": "http://localhost:7098;http://192.168.0.80:7098",
-      "applicationUrl": "http://localhost:7098;http://192.168.0.97:7098",
+      "applicationUrl": "http://localhost:7098;http://192.168.1.73:7098",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
